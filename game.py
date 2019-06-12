@@ -5,6 +5,7 @@ import pygame.surfarray as surfarray
 
 # crée une palette de couleurs
 from math import sqrt
+from pygame.draw import circle
 from pygame.transform import scale
 
 pygame.init()
@@ -24,64 +25,70 @@ palette = {
 black = (0, 0, 0, 255)
 blue = (0, 0, 255, 255)
 
-WIDTH = 20  # largeur d'une case en pixels
-NBcases = 20
-screen_size = [WIDTH * NBcases, WIDTH * NBcases]
-screen = pygame.display.set_mode(screen_size)
-plan = ['GGGGGGGGGGGGGGGGGGGG',
-        'BBBBBBBBBGGBBBBBBBBB',
-        'BBBBBGGGGGGGGGGBBGGB',
-        'BBBBBBBBBGGBBBBBBGGB',
-        'BBGGBGGBBGGBBGGGGGGB',
-        'BBBBBBGGBGGBBBGGGGGG',
-        'BBBBBBBBBGGBBBGGBBBB',
-        'GGBGGBGGBBBBBBGGBBGG',
-        'BBBBBBBBBGGBBBBBBBGG',
-        'GGBBGGGGGGBBBBGGGGGG',
-        'GGBBGGBBBBBBGGBBBGGB',
-        'GGBGGBBGGBBBBBGGBGGB',
-        'GGBBBBBGGBGGBBBBBGGB',
-        'GGGGGGGGBBBBBBGGGGGG',
-        'BBBBBBBBBBGGGGGGGGGG',
-        'GGBBBGGBBGGGGBBBBGGB',
-        'GGBBBBBGGBBBBGGBBBBB',
-        'GGBBGGBBGGGBBGGBBGGB',
-        'GGBBBBBBBBBBBBBBBBGG',
-        'GGGGGGGGGGGGGGGGGGGG']
+case_size = 40
+plan = [
+    "WRBW BBBB  RBYBYW YR  BRY RWBB",
+    "WYGBYGR BY GBGBRR YRWRWRRWBB B",
+    "BWRGBB GWBRRRWGGGBRGBBWGBGBGRB",
+    "WGGBWGWWRRGBYWBRBGRYBRY G WWY ",
+    "GBWWGWRRRWYGBBYWYGRBRBY RRWGBR",
+    "RGR WRRW BWGR  GGRGG GYRYB BWR",
+    "WG BYBRY WG YBGB BWWYGW WBR W ",
+    "BRWBRRYWWBB YW BWWGBRG BYGWW W",
+    " YYY   GRY WYGBYGBGGGYWYYRBGYW",
+    "WWWYBBGYYRWBG G GGYBWRWWRRGGGR",
+    "GBYGR WY RRGGGGRRRYWWRWYGRRB B",
+    " WG RW R BGY R  W RWW BYRRRY  ",
+    "BYWRYGBY  GY YGGWRYYYRWWBBY YR",
+    "GGBB GGGG BGYBRG GRGWWBRGYRWWB",
+    "GYYYGBY YRYWWWR GYRBGBBY BWGRW",
+]
 
-# verification du plan
+terrain_dim = [len(plan[0]), len(plan)]
 
-if len(plan) != NBcases: print("erreur, nombre de lignes dans le plan")
-for ligne in plan:
-    if len(ligne) != NBcases: print("erreur, ligne pas à la bonne dimension")
-
-# remplissage du tableau du labyrinthe
-LABY = np.zeros((NBcases, NBcases, 3))
-for y in range(NBcases):
-    ligne = plan[y]
-    for x in range(NBcases):
-        c = ligne[x]
-        LABY[x, y] = palette[c]
-
-
-def ToSprite(ascii) -> pygame.Surface:
-    _larg = len(max(ascii, key=len))  # on prend la ligne la plus grande
-    _haut = len(ascii)
-    TBL = np.zeros((_larg, _haut, 3))  # tableau 3 dimensions
-
-    for y in range(_haut):
-        ligne = ascii[y]
-        for x in range(len(ligne)):
-            c = ligne[x]  # on recupere la lettre
-            TBL[x, y] = palette[c]  # on stocke le code couleur RVB
-
-    # conversion du tableau de RVB en sprite pygame
-    sprite = surfarray.make_surface(TBL)
-    return sprite
-
+WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1]]
+screen = pygame.display.set_mode(WINDOW_SIZE)
 
 clock = pygame.time.Clock()
 
+units = {
+    "tank": {
+        "sprite": pygame.Surface((1, 1)),
+        "terrains": {
+            "R": 1,
+            "V": 2
+        },
+        "cible": {
+            "min": 1,
+            "max": 4
+        }
+    },
+
+    "fusilier": {
+        "sprite": pygame.Surface((1, 1)),
+        "terrains": {
+            "R": 10,
+            "V": 10
+        },
+        "cible": {
+            "min": 0,
+            "max": 2
+        }
+    },
+}
+
+terrain_units = [
+    {
+        "type": "fusilier",
+        "X": 5,
+        "Y": 2
+    },
+    {
+        "type": "tank",
+        "X": 6,
+        "Y": 4
+    },
+]
 done = False
 
 while not done:
@@ -89,13 +96,23 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    for ix in range(NBcases):
-        for iy in range(NBcases):
-            xpix = WIDTH * ix
-            ypix = WIDTH * iy
-            couleur = LABY[ix, iy]
-            pygame.draw.rect(screen, couleur, [xpix, ypix, WIDTH, WIDTH])
+    LABY = np.zeros((terrain_dim[0], terrain_dim[1], 3))
+    for y in range(terrain_dim[1]):
+        ligne = plan[y]
+        for x in range(terrain_dim[0]):
+            c = ligne[x]
+            LABY[x, y] = palette[c]
 
+    for ix in range(terrain_dim[0]):
+        for iy in range(terrain_dim[1]):
+            xpix = case_size * ix
+            ypix = case_size * iy
+            couleur = LABY[ix, iy]
+            pygame.draw.rect(screen, couleur, [xpix, ypix, case_size, case_size])
+
+    # Affichage des unités
+    for unite in terrain_units:
+        circle(screen, [255, 0, 0], (int((unite["X"] - 0.5) * case_size), int((unite["Y"] - 0.5) * case_size)), 10)
     clock.tick(30)
 
     pygame.display.flip()

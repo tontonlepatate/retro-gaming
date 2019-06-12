@@ -1,2 +1,10 @@
-print("hello")
-print("coucou")
+import pygame
+
+pygame.init()
+
+done = False
+
+while not done:
+    ""
+
+pygame.quit()

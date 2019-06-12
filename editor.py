@@ -19,11 +19,12 @@ palette = {
     'R': [255, 0, 0],
     'Y': [255, 255, 0],
     'C': [0, 225, 255],
-    'EXPORT': [100, 100, 100]
+    'EXPORT': [100, 100, 100],
+    'RANDOM': [200, 100, 50]
 }  # initialise un dictionnaire
 
 pixel_size = 20
-terrain_dim = [20, 20]
+terrain_dim = [30, 15]
 
 ###################################################################################
 
@@ -67,15 +68,15 @@ while not done:
     # draw background
     screen.fill(WHITE)
 
-    LABY = np.zeros((20, 20, 3))
-    for y in range(20):
+    LABY = np.zeros((terrain_dim[0], terrain_dim[1], 3))
+    for y in range(terrain_dim[1]):
         ligne = matrice[y]
-        for x in range(20):
+        for x in range(terrain_dim[0]):
             c = ligne[x]
             LABY[x, y] = palette[c]
 
-    for ix in range(20):
-        for iy in range(20):
+    for ix in range(terrain_dim[0]):
+        for iy in range(terrain_dim[1]):
             xpix = pixel_size * ix
             ypix = pixel_size * iy
             couleur = LABY[ix, iy]
@@ -113,6 +114,15 @@ while not done:
                     for ligne in matrice:
                         print("\"{}\",".format(ligne))
                         clicked = False
+                elif select == "RANDOM":
+                    select = ' '
+                    matrice = []
+                    for line in range(terrain_dim[1]):
+                        chaine = ""
+                        for col in range(terrain_dim[0]):
+                            chaine = chaine + palid[int(random() * 6)]
+                        matrice.append(chaine)
+                    clicked = False
             except:
                 ""
 

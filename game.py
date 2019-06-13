@@ -1,13 +1,7 @@
-import math
-import pygame
 import numpy as np
-import pygame.surfarray as surfarray
-
-# crée une palette de couleurs
-from math import sqrt
+import pygame
 from pygame.draw import circle, rect
 from pygame.rect import Rect
-from pygame.transform import scale
 
 pygame.init()
 
@@ -82,22 +76,26 @@ terrain_units = [
     {
         "type": "fusilier",
         "X": 5,
-        "Y": 2
+        "Y": 2,
+        "deplacement": 10
     },
     {
         "type": "tank",
         "X": 6,
-        "Y": 4
+        "Y": 4,
+        "deplacement": 10
     },
     {
         "type": "tank",
         "X": 20,
-        "Y": 8
+        "Y": 8,
+        "deplacement": 10
     },
-{
+    {
         "type": "fusilier",
         "X": 25,
-        "Y": 15
+        "Y": 15,
+        "deplacement": 10
     },
 ]
 done = False

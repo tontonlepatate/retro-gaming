@@ -5,7 +5,8 @@ import pygame.surfarray as surfarray
 
 # crée une palette de couleurs
 from math import sqrt
-from pygame.draw import circle
+from pygame.draw import circle, rect
+from pygame.rect import Rect
 from pygame.transform import scale
 
 pygame.init()
@@ -25,7 +26,7 @@ palette = {
 black = (0, 0, 0, 255)
 blue = (0, 0, 255, 255)
 
-case_size = 40
+case_size = 60
 plan = [
     "WRBW BBBB  RBYBYW YR  BRY RWBB",
     "WYGBYGR BY GBGBRR YRWRWRRWBB B",
@@ -88,6 +89,16 @@ terrain_units = [
         "X": 6,
         "Y": 4
     },
+    {
+        "type": "tank",
+        "X": 20,
+        "Y": 8
+    },
+{
+        "type": "fusilier",
+        "X": 25,
+        "Y": 15
+    },
 ]
 done = False
 
@@ -112,7 +123,10 @@ while not done:
 
     # Affichage des unités
     for unite in terrain_units:
-        circle(screen, [255, 0, 0], (int((unite["X"] - 0.5) * case_size), int((unite["Y"] - 0.5) * case_size)), 10)
+        if unite["type"] == "fusilier":
+            circle(screen, [255, 0, 0], (int((unite["X"] - 0.5) * case_size), int((unite["Y"] - 0.5) * case_size)), 20)
+        if unite["type"] == "tank":
+            rect(screen, [255, 255, 0], Rect((unite["X"] * case_size) + 10, (unite["Y"] * case_size) + 10, 40, 40))
     clock.tick(30)
 
     pygame.display.flip()

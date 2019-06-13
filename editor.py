@@ -8,6 +8,9 @@ import pygame
 from pygame import draw, transform, surfarray
 from pygame.rect import Rect
 
+pixel_size = 20
+terrain_dim = [20, 15]
+
 BLACK = (0, 0, 0, 255)
 WHITE = (255, 255, 255)
 
@@ -23,8 +26,7 @@ palette = {
     'RANDOM': [200, 100, 50]
 }  # initialise un dictionnaire
 
-pixel_size = 20
-terrain_dim = [30, 15]
+
 
 ###################################################################################
 

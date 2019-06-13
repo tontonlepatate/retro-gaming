@@ -15,13 +15,20 @@ BLACK = (0, 0, 0, 255)
 WHITE = (255, 255, 255)
 
 palette = {
-    'B': [0, 0, 255],
-    ' ': [0, 0, 0],
-    'W': [255, 255, 255],
-    'G': [0, 255, 0],
-    'R': [255, 0, 0],
-    'Y': [255, 255, 0],
-    'C': [0, 225, 255],
+    'B': [154, 14, 159], #base
+    'E': [100, 104, 236], #eau
+    'R': [0, 0, 0], #route
+    'V': [255, 0, 0], #ville
+    'f': [10, 77, 15], #foret
+    'S': [208, 182, 77],#plage
+    'M': [88, 64, 9],#montagne
+    'C': [175, 149, 88],#colline
+    'P': [66, 164, 36],#plaine
+    'F': [87, 30, 5],#fort
+    'T':[255, 255, 255],#recherche
+    'U':[255, 255, 255],#Usine M
+    'u':[255, 255, 255],#Usine C
+    ' ': [255, 255, 255],#void
     'EXPORT': [100, 100, 100],
     'RANDOM': [200, 100, 50]
 }  # initialise un dictionnaire
@@ -55,7 +62,7 @@ for line in range(terrain_dim[1]):
         chaine = chaine + " "
     matrice.append(chaine)
 
-select = 'B'
+select = 'P'
 clicked = False
 
 while not done:

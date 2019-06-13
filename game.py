@@ -8,35 +8,42 @@ pygame.init()
 pygame.display.set_caption("Wargame")
 
 palette = {
-    'B': [0, 0, 255],
-    ' ': [0, 0, 0],
-    'W': [255, 255, 255],
-    'G': [0, 255, 0],
-    'R': [255, 0, 0],
-    'Y': [255, 255, 0],
-    'C': [0, 225, 255]
+    'B': [154, 14, 159], #base
+    'E': [100, 104, 236], #eau
+    'R': [0, 0, 0], #route
+    'V': [255, 0, 0], #ville
+    'f': [10, 77, 15], #foret
+    'S': [208, 182, 77],#plage
+    'M': [88, 64, 9],#montagne
+    'C': [175, 149, 88],#colline
+    'P': [66, 164, 36],#plaine
+    'F': [87, 30, 5],#fort
+    'T':[255, 255, 255],#recherche
+    'U':[255, 255, 255],#Usine M
+    'u':[255, 255, 255],#Usine C
+    ' ': [255, 255, 255]#void
 }  # initialise un dictionnaire
 
 black = (0, 0, 0, 255)
 blue = (0, 0, 255, 255)
 
-case_size = 60
+case_size = 40
 plan = [
-    "WRBW BBBB  RBYBYW YR  BRY RWBB",
-    "WYGBYGR BY GBGBRR YRWRWRRWBB B",
-    "BWRGBB GWBRRRWGGGBRGBBWGBGBGRB",
-    "WGGBWGWWRRGBYWBRBGRYBRY G WWY ",
-    "GBWWGWRRRWYGBBYWYGRBRBY RRWGBR",
-    "RGR WRRW BWGR  GGRGG GYRYB BWR",
-    "WG BYBRY WG YBGB BWWYGW WBR W ",
-    "BRWBRRYWWBB YW BWWGBRG BYGWW W",
-    " YYY   GRY WYGBYGBGGGYWYYRBGYW",
-    "WWWYBBGYYRWBG G GGYBWRWWRRGGGR",
-    "GBYGR WY RRGGGGRRRYWWRWYGRRB B",
-    " WG RW R BGY R  W RWW BYRRRY  ",
-    "BYWRYGBY  GY YGGWRYYYRWWBBY YR",
-    "GGBB GGGG BGYBRG GRGWWBRGYRWWB",
-    "GYYYGBY YRYWWWR GYRBGBBY BWGRW",
+    "PPPPPPPPPSEESPPPPRRR",
+    "PfffPPPPPSEESPPPPRBR",
+    "fffffffPFSEESFffVRRR",
+    "fffRRRRRRRRRRRRRRRFP",
+    "PPfRVfPPSEESPffPPRPP",
+    "PPPRffPPSEESPPffPRPP",
+    "PPPRPPCPSEESPfffVRfP",
+    "PPVRPPCPSEESPffffRfP",
+    "PPPRPCCCSEESPPfffRPP",
+    "PPPRPCCPSEESPPPPPRPP",
+    "PPPRPCCPSEESMMPCCRVP",
+    "PPFRVPPPSEEMMMPCCRPP",
+    "RRRRPPPPSMMMMPPCPRPP",
+    "RBRPPPPPMMMMPPPPRRPP",
+    "RRRPPPPMMMMPPPPPPPPP",
 ]
 
 terrain_dim = [len(plan[0]), len(plan)]

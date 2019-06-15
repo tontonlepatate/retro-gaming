@@ -57,8 +57,20 @@ units = {
     "tank": {
         "sprite": pygame.Surface((1, 1)),
         "terrains": {
-            "R": 1,
-            "V": 2
+            'B': 1,  # base
+            'E': -1,  # eau
+            'R': 1,  # route
+            'V': -1,  # ville
+            'f': 2,  # foret
+            'S': 2,  # plage
+            'M': -1,  # montagne
+            'C': 2,  # colline
+            'P': 1,  # plaine
+            'F': -1,  # fort
+            'T': -1,  # recherche
+            'U': -1,  # Usine M
+            'u': -1,  # Usine C
+            ' ': -1  # void
         },
         "cible": {
             "min": 1,
@@ -69,8 +81,20 @@ units = {
     "fusilier": {
         "sprite": pygame.Surface((1, 1)),
         "terrains": {
-            "R": 10,
-            "V": 10
+            'B': 1,  # base
+            'E': 1,  # eau
+            'R': 1,  # route
+            'V': -1,  # ville
+            'f': 3,  # foret
+            'S': 3,  # plage
+            'M': -1,  # montagne
+            'C': 2,  # colline
+            'P': 1,  # plaine
+            'F': 1,  # fort
+            'T': 1,  # recherche
+            'U': 1,  # Usine M
+            'u': 1,  # Usine C
+            ' ': -1  # void
         },
         "cible": {
             "min": 0,
@@ -114,6 +138,7 @@ terrain_units = [
 done = False
 
 selected_unit = -1
+lastclick = False
 
 while not done:
     for event in pygame.event.get():
@@ -138,13 +163,26 @@ while not done:
         pos = pygame.mouse.get_pos()
         x = pos[0]
         y = pos[1]
-        for unite in terrain_units:
-            xu = unite["X"] * case_size
-            yu = unite["Y"] * case_size
-            rectcol = Rect(xu, yu, case_size, case_size)
-            if rectcol.collidepoint(x, y):
-                selected_unit = terrain_units.index(unite)
-        print()
+        if lastclick is not True:
+            lastclick = True
+            for unite in terrain_units:
+                xu = unite["X"] * case_size
+                yu = unite["Y"] * case_size
+                rectcol = Rect(xu, yu, case_size, case_size)
+                if rectcol.collidepoint(x, y):
+                    if terrain_units.index(unite) != selected_unit:
+                        selected_unit = terrain_units.index(unite)
+                    else:
+                        selected_unit = -1
+    else:
+        lastclick = False
+
+    if selected_unit is not -1:
+        pos = pygame.mouse.get_pos()
+        x = pos[0] // case_size
+        y = pos[1] // case_size
+        tank = Rect(x * case_size, y * case_size, case_size, case_size)
+        rect(screen, [255, 0, 0, 100], tank)
 
     # Affichage des unités
     for unite in terrain_units:
@@ -157,7 +195,8 @@ while not done:
             circle(screen, [255, 0, 255], (int((unite["X"] + 0.5) * case_size), int((unite["Y"] + 0.5) * case_size)),
                    20)
         elif unite["type"] == "tank":
-            tank = Rect((unite["X"] * case_size) + case_size // 4, (unite["Y"] * case_size) + case_size // 4, case_size // 2, case_size // 2)
+            tank = Rect((unite["X"] * case_size) + case_size // 4, (unite["Y"] * case_size) + case_size // 4,
+                        case_size // 2, case_size // 2)
             rect(screen, [255, 255, 0], tank)
     clock.tick(30)
 

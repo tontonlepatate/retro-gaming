@@ -47,6 +47,7 @@ plan = [
     "RBRPPPPPMMMMPPPPRRPP",
     "RRRPPPPMMMMPPPPPPPPP",
 ]
+#test = pygame.image.load(os.path.join(assets, "fond.png"))
 
 terrain_dim = [len(plan[0]), len(plan)]
 
@@ -77,7 +78,21 @@ units = {
         "cible": {
             "min": 1,
             "max": 4
-        }
+        },
+        "stat": {      # tintin's stat
+            "movepoint": 8,         # point de mouvement
+            "cost": 10000,           # argent requis lors du recrutement
+            "manpower": 10000,        # man power requis "		"
+            "supplies": 5,          # point de supplie "		"
+            "defaultorga": 50,      # multiplicateur globale de l'efficacité de l'unité [0-100]
+            "defensiveness": 50,    # stat défensive[0-100]
+            "toughness": 80,        # point de vie (Hard) (toughness+softness=100)
+            "softness": 20,         # point de vie (soft)
+            "airdefence": 10,       # stat défensive anti-aérien[0-100] (réduction des dégat subit)
+            "softattack": 20,       # stat attaque (Soft)
+            "hardattack": 80,       # stat attaque (Hard)
+            "airattack": 10         # stat attaque anti-aérien (dégat infliger)
+        },
     },
 
     "fusilier": {
@@ -101,7 +116,21 @@ units = {
         "cible": {
             "min": 0,
             "max": 3
-        }
+        },
+        "stat" : {      # tintin's stat
+            "movepoint": 4,
+            "cost": 1000,
+            "manpower": 10000,
+            "supplies": 1,
+            "defaultorga": 50,
+            "defensiveness": 10,
+            "toughness": 10,
+            "softness": 90,
+            "airdefence": 20,
+            "softattack": 80,
+            "hardattack": 10,
+            "airattack": 10
+        },
     },
 }
 
@@ -157,7 +186,6 @@ def trans_case(color, pos):
     s.set_alpha(100)
     s.fill(color)
     screen.blit(s, (pos[0] * case_size, pos[1] * case_size))
-
 
 while not done:
     for event in pygame.event.get():

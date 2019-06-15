@@ -1,7 +1,9 @@
 import numpy as np
 import pygame
+from math import sqrt
 from pygame.draw import circle, rect
 from pygame.rect import Rect
+from pygame.surface import Surface
 
 pygame.init()
 
@@ -118,7 +120,7 @@ terrain_units = [
     },
     {
         "type": "tank",
-        "X": 20,
+        "X": 12,
         "Y": 8,
         "deplacement": 10
     },
@@ -130,7 +132,7 @@ terrain_units = [
     },
     {
         "type": "fusilier",
-        "X": 25,
+        "X": 10,
         "Y": 10,
         "deplacement": 10
     },
@@ -139,6 +141,18 @@ done = False
 
 selected_unit = -1
 lastclick = False
+
+
+def distance(x1, y1, x2, y2):
+    return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
+
+
+def trans_case(color, pos):
+    s = Surface((case_size, case_size))
+    s.set_alpha(100)
+    s.fill(color)
+    screen.blit(s, (pos[0] * case_size, pos[1] * case_size))
+
 
 while not done:
     for event in pygame.event.get():
@@ -177,13 +191,6 @@ while not done:
     else:
         lastclick = False
 
-    if selected_unit is not -1:
-        pos = pygame.mouse.get_pos()
-        x = pos[0] // case_size
-        y = pos[1] // case_size
-        tank = Rect(x * case_size, y * case_size, case_size, case_size)
-        rect(screen, [255, 0, 0, 100], tank)
-
     # Affichage des unités
     for unite in terrain_units:
         id = terrain_units.index(unite)
@@ -198,6 +205,25 @@ while not done:
             tank = Rect((unite["X"] * case_size) + case_size // 4, (unite["Y"] * case_size) + case_size // 4,
                         case_size // 2, case_size // 2)
             rect(screen, [255, 255, 0], tank)
+
+    if selected_unit is not -1:
+        pos = pygame.mouse.get_pos()
+        x = pos[0] // case_size
+        y = pos[1] // case_size
+
+        sct_unite = terrain_units[selected_unit]
+        sct_type = units[sct_unite["type"]]
+        x_sct = sct_unite["X"]
+        y_sct = sct_unite["Y"]
+
+        for unite in terrain_units:
+            x_unit = unite["X"]
+            y_unit = unite["Y"]
+            min_unit = float(sct_type["cible"]["min"])
+            max_unite = float(sct_type["cible"]["max"])
+            distance_u = distance(x_sct, y_sct, x_unit, y_unit)
+            if min_unit <= distance_u <= max_unite and unite != sct_unite:
+                trans_case([0, 255, 0], (x_unit, y_unit))
     clock.tick(30)
 
     pygame.display.flip()

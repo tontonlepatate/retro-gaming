@@ -100,7 +100,7 @@ units = {
         },
         "cible": {
             "min": 0,
-            "max": 2
+            "max": 3
         }
     },
 }
@@ -110,31 +110,36 @@ terrain_units = [
         "type": "fusilier",
         "X": 5,
         "Y": 2,
-        "deplacement": 10
+        "deplacement": 10,
+        "equipe": 1
     },
     {
         "type": "tank",
         "X": 6,
         "Y": 4,
-        "deplacement": 10
+        "deplacement": 10,
+        "equipe": 0
     },
     {
         "type": "tank",
         "X": 12,
         "Y": 8,
-        "deplacement": 10
+        "deplacement": 10,
+        "equipe": 0
     },
     {
         "type": "tank",
         "X": 0,
         "Y": 0,
-        "deplacement": 10
+        "deplacement": 10,
+        "equipe": 0
     },
     {
         "type": "fusilier",
         "X": 10,
         "Y": 10,
-        "deplacement": 10
+        "deplacement": 10,
+        "equipe": 0
     },
 ]
 done = False
@@ -215,15 +220,20 @@ while not done:
         sct_type = units[sct_unite["type"]]
         x_sct = sct_unite["X"]
         y_sct = sct_unite["Y"]
+        equipe_sct = sct_unite["equipe"]
 
         for unite in terrain_units:
             x_unit = unite["X"]
             y_unit = unite["Y"]
+            equipe_unit = unite["equipe"]
             min_unit = float(sct_type["cible"]["min"])
             max_unite = float(sct_type["cible"]["max"])
             distance_u = distance(x_sct, y_sct, x_unit, y_unit)
             if min_unit <= distance_u <= max_unite and unite != sct_unite:
-                trans_case([0, 255, 0], (x_unit, y_unit))
+                if equipe_unit == equipe_sct:
+                    trans_case([255, 0, 0], (x_unit, y_unit))
+                else:
+                    trans_case([0, 255, 0], (x_unit, y_unit))
     clock.tick(30)
 
     pygame.display.flip()

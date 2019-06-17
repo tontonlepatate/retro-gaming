@@ -176,6 +176,10 @@ selected_unit = -1
 lastclick = False
 
 
+def equipe_differente(unite1: int, unite2: int) -> bool:
+    return terrain_units[unite1] != terrain_units[unite2]["equipe"]
+
+
 def attaque(id_unite: int, id_cible: int):
     unite = terrain_units[id_unite]
     cible = terrain_units[id_cible]
@@ -187,6 +191,17 @@ def attaque(id_unite: int, id_cible: int):
     print(str(id_unite) + " attaque " + str(id_cible))
 
 
+def attaque_range(id_unite: int, id_cible: int):
+    if id_unite == id_cible:
+        return False
+    type = units[terrain_units[id_unite]["type"]]
+    min = float(type["cible"]["min"])
+    max = float(type["cible"]["max"])
+    dist = distance(terrain_units[id_unite]["X"], terrain_units[id_unite]["Y"],
+                    terrain_units[id_cible]["X"], terrain_units[id_cible]["Y"])
+    return min <= dist <= max
+
+
 def distance(x1, y1, x2, y2):
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
 
@@ -196,6 +211,12 @@ def trans_case(color, pos):
     s.set_alpha(100)
     s.fill(color)
     screen.blit(s, (pos[0] * case_size, pos[1] * case_size))
+
+
+def deplacement(id_unite):
+    unite = terrain_units[id_unite]
+
+    terrain_units[id_unite] = unite
 
 
 while not done:
@@ -219,33 +240,51 @@ while not done:
 
     if event.type == pygame.MOUSEBUTTONDOWN:
         pos = pygame.mouse.get_pos()
-        x = pos[0]
-        y = pos[1]
+        x = pos[0] // case_size
+        y = pos[1] // case_size
+        cible_unite = False
         if lastclick is not True:
             lastclick = True
             for unite in terrain_units:
                 xu = unite["X"] * case_size
                 yu = unite["Y"] * case_size
                 rectcol = Rect(xu, yu, case_size, case_size)
-                if rectcol.collidepoint(x, y):
-                    if terrain_units.index(unite) != selected_unit:
+                cible_id = terrain_units.index(unite)
+
+                if rectcol.collidepoint(x * case_size, y * case_size):
+                    cible_unite = True
+                    if cible_id != selected_unit:
                         if selected_unit != -1:
-                            if terrain_units[selected_unit]["equipe"] is not unite["equipe"]:
-                                attaque(selected_unit, terrain_units.index(unite))
+                            if equipe_differente(selected_unit, cible_id) and attaque_range(selected_unit, cible_id):
+                                attaque(selected_unit, cible_id)
                             selected_unit = -1
                         else:
-                            selected_unit = terrain_units.index(unite)
+                            selected_unit = cible_id
                     else:
                         selected_unit = -1
+        if (cible_unite is False) and (selected_unit != -1):
+            unite = terrain_units[selected_unit]
+            x_unit = unite["X"]
+            y_unit = unite["Y"]
+            type_unit = units[unite["type"]]
+            terrain = plan[y][x]
+            cout = type_unit["terrains"][terrain]
+            dep = unite["deplacement"]
+
+            dist = int(distance(x_unit, y_unit, x, y))
+            if dist == 1 and cout != -1 and cout <= dep:
+                terrain_units[selected_unit]["X"] = x
+                terrain_units[selected_unit]["Y"] = y
+                terrain_units[selected_unit]["deplacement"] -= cout
     else:
         lastclick = False
 
     # Affichage des unités
     for unite in terrain_units:
-        id = terrain_units.index(unite)
-        if selected_unit == id:
-            tank = Rect(unite["X"] * case_size, unite["Y"] * case_size, case_size, case_size)
-            rect(screen, [255, 100, 0], tank)
+        cible_id = terrain_units.index(unite)
+        if selected_unit == cible_id:
+            select_rect = Rect(unite["X"] * case_size, unite["Y"] * case_size, case_size, case_size)
+            rect(screen, [255, 100, 0], select_rect)
 
         if unite["type"] == "fusilier":
             circle(screen, [255, 0, 255], (int((unite["X"] + 0.5) * case_size), int((unite["Y"] + 0.5) * case_size)),
@@ -270,10 +309,7 @@ while not done:
             x_unit = unite["X"]
             y_unit = unite["Y"]
             equipe_unit = unite["equipe"]
-            min_unit = float(sct_type["cible"]["min"])
-            max_unite = float(sct_type["cible"]["max"])
-            distance_u = distance(x_sct, y_sct, x_unit, y_unit)
-            if min_unit <= distance_u <= max_unite and unite != sct_unite:
+            if attaque_range(selected_unit, terrain_units.index(unite)):
                 if equipe_unit == equipe_sct:
                     trans_case([255, 0, 0], (x_unit, y_unit))
                 else:

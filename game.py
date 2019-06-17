@@ -179,7 +179,11 @@ lastclick = False
 def attaque(id_unite: int, id_cible: int):
     unite = terrain_units[id_unite]
     cible = terrain_units[id_cible]
+    # Début de attaque
 
+    # Fin de attaque
+    terrain_units[id_unite] = unite
+    terrain_units[id_cible] = cible
     print(str(id_unite) + " attaque " + str(id_cible))
 
 

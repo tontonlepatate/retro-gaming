@@ -47,7 +47,6 @@ plan = [
     "RBRPPPPPMMMMPPPPRRPP",
     "RRRPPPPMMMMPPPPPPPPP",
 ]
-#test = pygame.image.load(os.path.join(assets, "fond.png"))
 
 terrain_dim = [len(plan[0]), len(plan)]
 

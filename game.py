@@ -187,6 +187,9 @@ def trans_case(color, pos):
     s.fill(color)
     screen.blit(s, (pos[0] * case_size, pos[1] * case_size))
 
+    #for unite in units:
+
+
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

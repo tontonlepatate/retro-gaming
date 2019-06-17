@@ -78,19 +78,19 @@ units = {
             "min": 1,
             "max": 4
         },
-        "stat": {      # tintin's stat
-            "movepoint": 8,         # point de mouvement
-            "cost": 10000,           # argent requis lors du recrutement
-            "manpower": 10000,        # man power requis "		"
-            "supplies": 5,          # point de supplie "		"
-            "defaultorga": 50,      # multiplicateur globale de l'efficacité de l'unité [0-100]
-            "defensiveness": 50,    # stat défensive[0-100]
-            "toughness": 80,        # point de vie (Hard) (toughness+softness=100)
-            "softness": 20,         # point de vie (soft)
-            "airdefence": 10,       # stat défensive anti-aérien[0-100] (réduction des dégat subit)
-            "softattack": 20,       # stat attaque (Soft)
-            "hardattack": 80,       # stat attaque (Hard)
-            "airattack": 10         # stat attaque anti-aérien (dégat infliger)
+        "stat": {  # tintin's stat
+            "movepoint": 8,  # point de mouvement
+            "cost": 10000,  # argent requis lors du recrutement
+            "manpower": 10000,  # man power requis "		"
+            "supplies": 5,  # point de supplie "		"
+            "defaultorga": 50,  # multiplicateur globale de l'efficacité de l'unité [0-100]
+            "defensiveness": 50,  # stat défensive[0-100]
+            "toughness": 80,  # point de vie (Hard) (toughness+softness=100)
+            "softness": 20,  # point de vie (soft)
+            "airdefence": 10,  # stat défensive anti-aérien[0-100] (réduction des dégat subit)
+            "softattack": 20,  # stat attaque (Soft)
+            "hardattack": 80,  # stat attaque (Hard)
+            "airattack": 10  # stat attaque anti-aérien (dégat infliger)
         },
     },
 
@@ -116,7 +116,7 @@ units = {
             "min": 0,
             "max": 3
         },
-        "stat" : {      # tintin's stat
+        "stat": {  # tintin's stat
             "movepoint": 4,
             "cost": 1000,
             "manpower": 10000,
@@ -176,6 +176,13 @@ selected_unit = -1
 lastclick = False
 
 
+def attaque(id_unite: int, id_cible: int):
+    unite = terrain_units[id_unite]
+    cible = terrain_units[id_cible]
+
+    print(str(id_unite) + " attaque " + str(id_cible))
+
+
 def distance(x1, y1, x2, y2):
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
 
@@ -185,8 +192,6 @@ def trans_case(color, pos):
     s.set_alpha(100)
     s.fill(color)
     screen.blit(s, (pos[0] * case_size, pos[1] * case_size))
-
-    #for unite in units:
 
 
 while not done:
@@ -220,7 +225,12 @@ while not done:
                 rectcol = Rect(xu, yu, case_size, case_size)
                 if rectcol.collidepoint(x, y):
                     if terrain_units.index(unite) != selected_unit:
-                        selected_unit = terrain_units.index(unite)
+                        if selected_unit != -1:
+                            if terrain_units[selected_unit]["equipe"] is not unite["equipe"]:
+                                attaque(selected_unit, terrain_units.index(unite))
+                            selected_unit = -1
+                        else:
+                            selected_unit = terrain_units.index(unite)
                     else:
                         selected_unit = -1
     else:

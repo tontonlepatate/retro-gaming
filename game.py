@@ -1,29 +1,49 @@
+import inspect
+import os
+
 import numpy as np
 import pygame
 from math import sqrt
+from pygame import transform
 from pygame.draw import circle, rect
 from pygame.rect import Rect
 from pygame.surface import Surface
+
+scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
+scriptDIR = os.path.dirname(scriptPATH)
+assets = os.path.join(scriptDIR, "data")
 
 pygame.init()
 
 pygame.display.set_caption("Wargame")
 
+image1_sprites = pygame.image.load(os.path.join(assets, "World_A1.png"))
+image2_sprites = pygame.image.load(os.path.join(assets, "World_A2.png"))
+image3_sprites = pygame.image.load(os.path.join(assets, "World_B.png"))
+image4_sprites = pygame.image.load(os.path.join(assets, "World_C.png"))
+
+
+def charger_sprite(feuille, x, y, size):
+    planche_sprites = feuille
+    planche_sprites.set_colorkey((0, 0, 0))
+    return planche_sprites.subsurface((x, y, size, size))
+
+
 palette = {
-    'B': [154, 14, 159],  # base
-    'E': [100, 104, 236],  # eau
-    'R': [0, 0, 0],  # route
-    'V': [255, 0, 0],  # ville
-    'f': [10, 77, 15],  # foret
-    'S': [208, 182, 77],  # plage
-    'M': [88, 64, 9],  # montagne
-    'C': [175, 149, 88],  # colline
-    'P': [66, 164, 36],  # plaine
-    'F': [87, 30, 5],  # fort
-    'T': [255, 255, 255],  # recherche
-    'U': [255, 255, 255],  # Usine M
-    'u': [255, 255, 255],  # Usine C
-    ' ': [255, 255, 255]  # void
+    'B': charger_sprite(image3_sprites, 383, 0, 95),  # base
+    'E': charger_sprite(image1_sprites, 23, 70, 50),  # eau
+    'R': charger_sprite(image2_sprites, 13, 210, 50),  # route
+    'V': charger_sprite(image4_sprites, 0, 334, 95),  # ville
+    'f': charger_sprite(image2_sprites, 378, 48, 95),  # foret
+    'S': charger_sprite(image2_sprites, 490, 208, 50),  # plage
+    'M': charger_sprite(image2_sprites, 671, 47, 95),  # montagne
+    'C': charger_sprite(image2_sprites, 576, 47, 95),  # colline
+    'P': charger_sprite(image2_sprites, 211, 70, 50),  # plaine
+    'F': charger_sprite(image3_sprites, 673, 100, 95),  # fort
+    'T': charger_sprite(image4_sprites, 470, 188, 95),  # recherche
+    'U': charger_sprite(image4_sprites, 376, 188, 95),  # Usine M
+    'u': charger_sprite(image4_sprites, 376, 282, 95),  # Usine C
+    ' ': charger_sprite(image1_sprites, 364, 47, 47)  # void
 }  # initialise un dictionnaire
 
 black = (0, 0, 0, 255)
@@ -47,6 +67,7 @@ plan = [
     "RBRPPPPPMMMMPPPPRRPP",
     "RRRPPPPMMMMPPPPPPPPP",
 ]
+
 
 terrain_dim = [len(plan[0]), len(plan)]
 
@@ -224,7 +245,19 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    LABY = np.zeros((terrain_dim[0], terrain_dim[1], 3))
+    pygame.event.pump()
+
+    KeysPressed = pygame.key.get_pressed()
+    if KeysPressed[pygame.K_PAGEUP]:
+        case_size += 1
+
+    elif KeysPressed[pygame.K_PAGEDOWN]:
+        case_size -= 1
+
+    WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1]]
+    screen = pygame.display.set_mode(WINDOW_SIZE)
+
+    LABY = np.zeros((terrain_dim[0], terrain_dim[1]), pygame.Surface)
     for y in range(terrain_dim[1]):
         ligne = plan[y]
         for x in range(terrain_dim[0]):
@@ -235,8 +268,11 @@ while not done:
         for iy in range(terrain_dim[1]):
             xpix = case_size * ix
             ypix = case_size * iy
-            couleur = LABY[ix, iy]
-            pygame.draw.rect(screen, couleur, [xpix, ypix, case_size, case_size])
+            p = LABY[ix, iy]
+            image = transform.scale(palette['P'], (case_size, case_size))
+            screen.blit(image, [xpix, ypix])
+            image = transform.scale(p, (case_size, case_size))
+            screen.blit(image, [xpix, ypix])
 
     if event.type == pygame.MOUSEBUTTONDOWN:
         pos = pygame.mouse.get_pos()

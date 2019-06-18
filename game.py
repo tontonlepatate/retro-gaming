@@ -90,9 +90,15 @@ impots = [10, 10]
 
 clock = pygame.time.Clock()
 
+care_vert = pygame.Surface((1, 1))
+care_vert.fill((0, 255, 0))
+
+care_bleu = pygame.Surface((1, 1))
+care_bleu.fill((0, 0, 255))
+
 units = {
     "tank": {
-        "sprite": pygame.Surface((1, 1)),
+        "sprite": care_bleu,
         "terrains": {
             'B': 1,  # base
             'E': -1,  # eau
@@ -130,7 +136,7 @@ units = {
     },
 
     "fusilier": {
-        "sprite": pygame.Surface((1, 1)),
+        "sprite": care_vert,
         "terrains": {
             'B': 1,  # base
             'E': 1,  # eau
@@ -228,15 +234,18 @@ def equipe_differente(unite1: int, unite2: int) -> bool:
 
 
 def attaque(id_unite: int, id_cible: int):
+    print(str(id_unite) + " attaque " + str(id_cible))
     terrain_units[id_unite]["att"] = True
     unite = terrain_units[id_unite]
     cible = terrain_units[id_cible]
     # Début de attaque
-
+    cible["hp"] -= 10
+    if cible["hp"] <= 0:
+        terrain_units.remove(cible)
+        return
     # Fin de attaque
     terrain_units[id_unite] = unite
     terrain_units[id_cible] = cible
-    print(str(id_unite) + " attaque " + str(id_cible))
 
 
 def attaque_range(id_unite: int, id_cible: int):
@@ -363,14 +372,17 @@ while not done:
             select_rect = Rect(unite["X"] * case_size, unite["Y"] * case_size, case_size, case_size)
             rect(screen, [255, 100, 0], select_rect)
 
-        if unite["type"] == "fusilier":
-            circle(screen, [255, 0, 255], (int((unite["X"] + 0.5) * case_size), int((unite["Y"] + 0.5) * case_size)),
-                   20)
-        elif unite["type"] == "tank":
-            tank = Rect((unite["X"] * case_size) + case_size // 4, (unite["Y"] * case_size) + case_size // 4,
-                        case_size // 2, case_size // 2)
-            rect(screen, [255, 255, 0], tank)
+        icon_unite = scale(units[unite["type"]]["sprite"], (case_size // 2, case_size // 2))
+        filtre_equipe = Surface((icon_unite.get_width(), icon_unite.get_height()))
+        filtre_equipe.set_alpha(100)
+        if unite["equipe"] == 1:
+            filtre_equipe.fill(BLUE)
+        else:
+            filtre_equipe.fill(RED)
+        icon_unite.blit(filtre_equipe, (0, 0))
+        screen.blit(icon_unite, (int((unite["X"] + 1 / 4) * case_size), int((unite["Y"] + 1 / 4) * case_size)))
 
+        # Affichage des HP
         hp_text = police.render("HP: " + str(terrain_units[cible_id]["hp"]), True, WHITE)
         hp_text_rat = hp_text.get_height() / hp_text.get_width()
         hp_text = scale(hp_text, (case_size, int(case_size * hp_text_rat)))
@@ -442,6 +454,10 @@ while not done:
     for i, v, c, co in zip(items, variables, colors, coordonnées):
         text = police.render(i + str(v), True, c)
         screen.blit(text, co)
+
+    i = 0
+    for unite in units:
+        i += 1
 
     clock.tick(30)
 

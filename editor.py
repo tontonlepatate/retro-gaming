@@ -7,33 +7,49 @@ import pygame
 # recherche du répertoire de travail
 from pygame import draw, transform, surfarray
 from pygame.rect import Rect
+from pygame.transform import scale
 
-pixel_size = 20
+pixel_size = 40
 terrain_dim = [20, 15]
+
+scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
+scriptDIR = os.path.dirname(scriptPATH)
+assets = os.path.join(scriptDIR, "data")
+
+image1_sprites = pygame.image.load(os.path.join(assets, "World_A1.png"))
+image2_sprites = pygame.image.load(os.path.join(assets, "World_A2.png"))
+image3_sprites = pygame.image.load(os.path.join(assets, "World_B.png"))
+image4_sprites = pygame.image.load(os.path.join(assets, "World_C.png"))
+
+
+def charger_sprite(feuille, x, y, size):
+    planche_sprites = feuille
+    planche_sprites.set_colorkey((0, 0, 0))
+    return planche_sprites.subsurface((x, y, size, size))
+
 
 BLACK = (0, 0, 0, 255)
 WHITE = (255, 255, 255)
 
+void = pygame.Surface((94, 94))
+void.fill(WHITE)
+
 palette = {
-    'B': [154, 14, 159], #base
-    'E': [100, 104, 236], #eau
-    'R': [0, 0, 0], #route
-    'V': [255, 0, 0], #ville
-    'f': [10, 77, 15], #foret
-    'S': [208, 182, 77],#plage
-    'M': [88, 64, 9],#montagne
-    'C': [175, 149, 88],#colline
-    'P': [66, 164, 36],#plaine
-    'F': [87, 30, 5],#fort
-    'T':[255, 255, 255],#recherche
-    'U':[255, 255, 255],#Usine M
-    'u':[255, 255, 255],#Usine C
-    ' ': [255, 255, 255],#void
-    'EXPORT': [100, 100, 100],
-    'RANDOM': [200, 100, 50]
+    'B': charger_sprite(image3_sprites, 383, 0, 95),  # base
+    'E': charger_sprite(image1_sprites, 23, 70, 50),  # eau
+    'R': charger_sprite(image2_sprites, 13, 210, 50),  # route
+    'V': charger_sprite(image4_sprites, 0, 334, 95),  # ville
+    'f': charger_sprite(image2_sprites, 378, 48, 95),  # foret
+    'S': charger_sprite(image2_sprites, 490, 220, 50),  # plage
+    'M': charger_sprite(image2_sprites, 671, 47, 95),  # montagne
+    'C': charger_sprite(image2_sprites, 576, 47, 95),  # colline
+    'P': charger_sprite(image2_sprites, 211, 70, 50),  # plaine
+    'F': charger_sprite(image3_sprites, 673, 100, 95),  # fort
+    'T': charger_sprite(image4_sprites, 470, 188, 95),  # recherche
+    'U': charger_sprite(image4_sprites, 376, 188, 95),  # Usine M
+    'u': charger_sprite(image4_sprites, 376, 282, 95),  # Usine C
+    ' ': charger_sprite(image2_sprites, 211, 70, 50)
 }  # initialise un dictionnaire
-
-
 
 ###################################################################################
 
@@ -77,7 +93,7 @@ while not done:
     # draw background
     screen.fill(WHITE)
 
-    LABY = np.zeros((terrain_dim[0], terrain_dim[1], 3))
+    LABY = np.zeros((terrain_dim[0], terrain_dim[1]), pygame.Surface)
     for y in range(terrain_dim[1]):
         ligne = matrice[y]
         for x in range(terrain_dim[0]):
@@ -89,7 +105,9 @@ while not done:
             xpix = pixel_size * ix
             ypix = pixel_size * iy
             couleur = LABY[ix, iy]
-            pygame.draw.rect(screen, couleur, [xpix, ypix, pixel_size, pixel_size])
+            screen.blit(scale(palette['P'], (pixel_size, pixel_size)), (xpix, ypix))
+            screen.blit(scale(couleur, (pixel_size, pixel_size)), (xpix, ypix))
+            # pygame.draw.rect(screen, couleur, [xpix, ypix, pixel_size, pixel_size])
 
     palid = {}
     i = 0
@@ -98,7 +116,8 @@ while not done:
         ypix = pixel_size * i
         couleur = palette[coul]
         palid[i] = coul
-        pygame.draw.rect(screen, couleur, [xpix, ypix, pixel_size, pixel_size])
+        screen.blit(scale(palette['P'], (pixel_size, pixel_size)), (xpix, ypix))
+        screen.blit(scale(couleur, (pixel_size, pixel_size)), (xpix, ypix))
         i = i + 1
 
     if event.type == pygame.MOUSEBUTTONDOWN:

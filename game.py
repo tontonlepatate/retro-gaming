@@ -301,9 +301,10 @@ while not done:
         y = pos[1] // case_size
         cible_unite = False
         if y >= terrain_dim[1]:
-            if terrain_dim[0] - 2 <= x <= terrain_dim[0]:
+            if terrain_dim[0] - 2 <= x <= terrain_dim[0] and terrain_dim[1] - 1 <= y <= terrain_dim[0]:
                 print("TOUR SUIVANT")
                 tour_equipe = 1 - tour_equipe
+                selected_unit = -1
                 for unite in terrain_units:
                     if unite["equipe"] == tour_equipe:
                         unite["att"] = False

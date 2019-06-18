@@ -121,7 +121,7 @@ units = {
         },
         "stat": {  # tintin's stat
             "movepoint": 8,  # point de mouvement
-            "cost": 10000,  # argent requis lors du recrutement
+            "cost": 1000,  # argent requis lors du recrutement
             "manpower": 10000,  # man power requis "		"
             "supplies": 5,  # point de supplie "		"
             "defaultorga": 50,  # multiplicateur globale de l'efficacité de l'unité [0-100]
@@ -159,7 +159,7 @@ units = {
         },
         "stat": {  # tintin's stat
             "movepoint": 4,
-            "cost": 1000,
+            "cost": 100,
             "manpower": 10000,
             "supplies": 1,
             "defaultorga": 50,
@@ -173,6 +173,8 @@ units = {
         },
     },
 }
+
+units_id = []
 
 terrain_units = [
     {
@@ -224,6 +226,7 @@ terrain_units = [
 done = False
 
 selected_unit = -1
+selected_unit_create = -1
 lastclick = False
 
 tour_equipe = 0
@@ -277,6 +280,10 @@ def deplacement(id_unite):
 
 
 while not done:
+    units_id = []
+    for unite in units:
+        units_id.append(unite)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -316,6 +323,7 @@ while not done:
         y = pos[1] // case_size
         cible_unite = False
         if y >= terrain_dim[1]:
+            # BTN tour suivant
             if terrain_dim[0] - 2 <= x <= terrain_dim[0] and terrain_dim[1] - 1 <= y <= terrain_dim[0]:
                 print("TOUR SUIVANT")
                 argent_player[tour_equipe] += impots[tour_equipe]
@@ -325,6 +333,11 @@ while not done:
                     if unite["equipe"] == tour_equipe:
                         unite["att"] = False
                         unite["deplacement"] = 10
+            # Création d'unite
+            elif x == selected_unit_create:
+                selected_unit_create = -1
+            elif x < len(units_id):
+                selected_unit_create = x
 
             cible_unite = True
         elif lastclick is not True:
@@ -347,6 +360,27 @@ while not done:
                             selected_unit = cible_id
                     else:
                         selected_unit = -1
+        if (cible_unite is False) and (selected_unit_create != -1):
+            type_u = units[units_id[selected_unit_create]]
+            cout = type_u["stat"]["cost"]
+
+            if cout < argent_player[tour_equipe]:
+                argent_player[tour_equipe] -= cout
+                new_unit = {
+                    "type": units_id[selected_unit_create],
+                    "X": int(x),
+                    "Y": int(y),
+                    "att": True,
+                    "hp": 100,
+                    "deplacement": 10,
+                    "equipe": tour_equipe
+                }
+                terrain_units.append(new_unit)
+            else:
+                print("Pas assez d'argent pour acheter l'unité")
+
+            selected_unit_create = -1
+
         if (cible_unite is False) and (selected_unit != -1):
             unite = terrain_units[selected_unit]
             x_unit = unite["X"]
@@ -455,10 +489,16 @@ while not done:
         text = police.render(i + str(v), True, c)
         screen.blit(text, co)
 
-    i = 0
-    for unite in units:
-        i += 1
-
+    for unite in range(0, len(units_id)):
+        unite_src = units[units_id[unite]]
+        image_unite = scale(unite_src["sprite"], (case_size - 4, case_size - 4))
+        frame_unite = Surface((case_size, case_size))
+        if unite == selected_unit_create:
+            frame_unite.fill((255, 255, 0))
+        else:
+            frame_unite.fill((0, 0, 0))
+        frame_unite.blit(image_unite, (2, 2))
+        screen.blit(frame_unite, (case_size * unite, case_size * terrain_dim[1]))
     clock.tick(30)
 
     pygame.display.flip()

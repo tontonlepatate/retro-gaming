@@ -8,6 +8,7 @@ from pygame import transform
 from pygame.draw import circle, rect
 from pygame.rect import Rect
 from pygame.surface import Surface
+from pygame.transform import scale
 
 scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
 scriptDIR = os.path.dirname(scriptPATH)
@@ -173,7 +174,7 @@ terrain_units = [
         "X": 5,
         "Y": 2,
         "att": False,
-        "hp": 10,
+        "hp": 100,
         "deplacement": 10,
         "equipe": 1
     },
@@ -357,6 +358,7 @@ while not done:
     # Affichage des unités
     for unite in terrain_units:
         cible_id = terrain_units.index(unite)
+
         if selected_unit == cible_id:
             select_rect = Rect(unite["X"] * case_size, unite["Y"] * case_size, case_size, case_size)
             rect(screen, [255, 100, 0], select_rect)
@@ -368,6 +370,18 @@ while not done:
             tank = Rect((unite["X"] * case_size) + case_size // 4, (unite["Y"] * case_size) + case_size // 4,
                         case_size // 2, case_size // 2)
             rect(screen, [255, 255, 0], tank)
+
+        hp_text = police.render("HP: " + str(terrain_units[cible_id]["hp"]), True, WHITE)
+        hp_text_rat = hp_text.get_height() / hp_text.get_width()
+        hp_text = scale(hp_text, (case_size, int(case_size * hp_text_rat)))
+
+        hp_surface = Surface((case_size, int(case_size * hp_text_rat)))
+        hp_surface.fill((0, 0, 0))
+        hp_surface.set_alpha(100)
+
+        hp_surface.blit(hp_text, (0, 0))
+        screen.blit(hp_surface,
+                    (terrain_units[cible_id]["X"] * case_size, terrain_units[cible_id]["Y"] * case_size))
 
     if selected_unit is not -1:
         pos = pygame.mouse.get_pos()
@@ -406,8 +420,6 @@ while not done:
     text = transform.scale(text, (case_size * 2, case_size))
     btn_toursuiv.blit(text, (0, 0))
     screen.blit(btn_toursuiv, ((terrain_dim[0] - 2) * case_size, terrain_dim[1] * case_size))
-
-
 
     # AFFICHAGE DU TOUR
     color = BLUE

@@ -197,7 +197,7 @@ lastclick = False
 
 
 def equipe_differente(unite1: int, unite2: int) -> bool:
-    return terrain_units[unite1] != terrain_units[unite2]["equipe"]
+    return terrain_units[unite1]["equipe"] != terrain_units[unite2]["equipe"]
 
 
 def attaque(id_unite: int, id_cible: int):

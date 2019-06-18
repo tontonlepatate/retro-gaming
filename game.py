@@ -172,6 +172,7 @@ terrain_units = [
         "type": "fusilier",
         "X": 5,
         "Y": 2,
+        "att": False,
         "deplacement": 10,
         "equipe": 1
     },
@@ -179,6 +180,7 @@ terrain_units = [
         "type": "tank",
         "X": 6,
         "Y": 4,
+        "att": False,
         "deplacement": 10,
         "equipe": 0
     },
@@ -186,6 +188,7 @@ terrain_units = [
         "type": "tank",
         "X": 12,
         "Y": 8,
+        "att": False,
         "deplacement": 10,
         "equipe": 0
     },
@@ -193,6 +196,7 @@ terrain_units = [
         "type": "tank",
         "X": 0,
         "Y": 0,
+        "att": False,
         "deplacement": 10,
         "equipe": 0
     },
@@ -200,6 +204,7 @@ terrain_units = [
         "type": "fusilier",
         "X": 10,
         "Y": 10,
+        "att": False,
         "deplacement": 10,
         "equipe": 0
     },
@@ -209,12 +214,15 @@ done = False
 selected_unit = -1
 lastclick = False
 
+tour_equipe = 0
+
 
 def equipe_differente(unite1: int, unite2: int) -> bool:
     return terrain_units[unite1]["equipe"] != terrain_units[unite2]["equipe"]
 
 
 def attaque(id_unite: int, id_cible: int):
+    terrain_units[id_unite]["att"] = True
     unite = terrain_units[id_unite]
     cible = terrain_units[id_cible]
     # Début de attaque
@@ -293,8 +301,13 @@ while not done:
         y = pos[1] // case_size
         cible_unite = False
         if y >= terrain_dim[1]:
-            if terrain_dim[0] - 2<= x <= terrain_dim[0]:
+            if terrain_dim[0] - 2 <= x <= terrain_dim[0]:
                 print("TOUR SUIVANT")
+                tour_equipe = 1 - tour_equipe
+                for unite in terrain_units:
+                    if unite["equipe"] == tour_equipe:
+                        unite["att"] = False
+                        unite["deplacement"] = 10
 
             cible_unite = True
         elif lastclick is not True:
@@ -309,10 +322,11 @@ while not done:
                     cible_unite = True
                     if cible_id != selected_unit:
                         if selected_unit != -1:
-                            if equipe_differente(selected_unit, cible_id) and attaque_range(selected_unit, cible_id):
+                            if equipe_differente(selected_unit, cible_id) and attaque_range(selected_unit, cible_id) \
+                                    and terrain_units[selected_unit]["att"] is False:
                                 attaque(selected_unit, cible_id)
                             selected_unit = -1
-                        else:
+                        elif terrain_units[cible_id]["equipe"] == tour_equipe:
                             selected_unit = cible_id
                     else:
                         selected_unit = -1
@@ -371,12 +385,13 @@ while not done:
             x_unit = unite["X"]
             y_unit = unite["Y"]
             equipe_unit = unite["equipe"]
-            if attaque_range(selected_unit, terrain_units.index(unite)):
+            if attaque_range(selected_unit, terrain_units.index(unite)) and terrain_units[selected_unit]["att"] is False:
                 if equipe_unit == equipe_sct:
                     trans_case([255, 0, 0], (x_unit, y_unit))
                 else:
                     trans_case([0, 255, 0], (x_unit, y_unit))
 
+    # BOUTON TOUR SUIVANT
     btn_toursuiv = Surface((case_size * 2, case_size))
     btn_toursuiv.fill(YELLOW)
     text = police.render("TOUR SUIVANT", True, BLACK)
@@ -384,6 +399,15 @@ while not done:
     btn_toursuiv.blit(text, (0, 0))
     screen.blit(btn_toursuiv, ((terrain_dim[0] - 2) * case_size, terrain_dim[1] * case_size))
 
+    # AFFICHAGE DU TOUR
+    color = BLUE
+    if tour_equipe == 1:
+        color = RED
+    text = police.render("TOUR DE L'EQUIPE " + str(tour_equipe + 1), True, color)
+    text = transform.scale(text, (case_size * 4, case_size))
+    screen.blit(text, ((terrain_dim[0] - 4) // 2 * case_size, 0))
+
+    # AFFICHAGE DES INFOS JOUEUR
     items = ["argent : ", "impots : ", "pts de recherche : ", "supply : ",
              "argent : ", "impots : ", "pts de recherche : ", "supply : "]
     variables = [argent_player[0], impots[0], ptsrecherche[0], supply[0], argent_player[1], impots[1], ptsrecherche[1],

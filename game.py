@@ -17,6 +17,15 @@ pygame.init()
 
 pygame.display.set_caption("Wargame")
 
+police = pygame.font.SysFont("arial", 15)
+
+BLACK = [0, 0, 0]
+WHITE = [255, 255, 255]
+GREEN = [0, 255, 0]
+RED = [255, 0, 0]
+BLUE = [0, 0, 255]
+YELLOW = [241, 244, 66]
+
 image1_sprites = pygame.image.load(os.path.join(assets, "World_A1.png"))
 image2_sprites = pygame.image.load(os.path.join(assets, "World_A2.png"))
 image3_sprites = pygame.image.load(os.path.join(assets, "World_B.png"))
@@ -72,6 +81,11 @@ terrain_dim = [len(plan[0]), len(plan)]
 
 WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1]]
 screen = pygame.display.set_mode(WINDOW_SIZE)
+
+argent_player = [500, 500]
+ptsrecherche = [0, 0]
+supply = [0, 0]
+impots = [0, 0]
 
 clock = pygame.time.Clock()
 
@@ -357,6 +371,21 @@ while not done:
                     trans_case([255, 0, 0], (x_unit, y_unit))
                 else:
                     trans_case([0, 255, 0], (x_unit, y_unit))
+
+    items = ["argent player 1 : ", "impots player 1 : ", "pts de recherche player 1 : ", "supply du player 1 : ",
+             "argent player 2 : ", "impots player 2 : ", "pts de recherche player 2 : ", "supply du player 2 : "]
+    variables = [argent_player[0], impots[0], ptsrecherche[0], supply[0], argent_player[1], impots[1], ptsrecherche[1],
+                 supply[1]]
+    verite = [True, True, True, True, True, True, True, True]
+    colors = [BLACK, BLACK, BLACK, BLACK, WHITE, WHITE, WHITE, WHITE]
+    coordonnées = [(0, 10), (0, 30), (0, 50), (0, 70), (case_size * terrain_dim[0] - 180, 10),
+                   (case_size * terrain_dim[0] - 180, 30), (case_size * terrain_dim[0] - 180, 50),
+                   (case_size * terrain_dim[0] - 180, 70)]
+
+    for i, v, ve, c, co in zip(items, variables, verite, colors, coordonnées):
+        text = police.render(i + str(v), ve, c)
+        screen.blit(text, co)
+
     clock.tick(30)
 
     pygame.display.flip()

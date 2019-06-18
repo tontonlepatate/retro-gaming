@@ -35,7 +35,7 @@ palette = {
     'R': charger_sprite(image2_sprites, 13, 210, 50),  # route
     'V': charger_sprite(image4_sprites, 0, 334, 95),  # ville
     'f': charger_sprite(image2_sprites, 378, 48, 95),  # foret
-    'S': charger_sprite(image2_sprites, 490, 208, 50),  # plage
+    'S': charger_sprite(image2_sprites, 490, 220, 50),  # plage
     'M': charger_sprite(image2_sprites, 671, 47, 95),  # montagne
     'C': charger_sprite(image2_sprites, 576, 47, 95),  # colline
     'P': charger_sprite(image2_sprites, 211, 70, 50),  # plaine
@@ -67,7 +67,6 @@ plan = [
     "RBRPPPPPMMMMPPPPRRPP",
     "RRRPPPPMMMMPPPPPPPPP",
 ]
-
 
 terrain_dim = [len(plan[0]), len(plan)]
 
@@ -308,7 +307,7 @@ while not done:
             dep = unite["deplacement"]
 
             dist = int(distance(x_unit, y_unit, x, y))
-            if dist == 1 and cout != -1 and cout <= dep:
+            if dist == 1 and -1 != cout <= dep:
                 terrain_units[selected_unit]["X"] = x
                 terrain_units[selected_unit]["Y"] = y
                 terrain_units[selected_unit]["deplacement"] -= cout
@@ -340,6 +339,14 @@ while not done:
         x_sct = sct_unite["X"]
         y_sct = sct_unite["Y"]
         equipe_sct = sct_unite["equipe"]
+        dep = sct_unite["deplacement"]
+
+        for case_x in range(-1, 2):
+            for case_y in range(-1, 2):
+                terrain = plan[y_sct + case_y][x_sct + case_x]
+                cout = sct_type["terrains"][terrain]
+                if dep >= cout != -1:
+                    trans_case([0, 0, 255], (x_sct + case_x, y_sct + case_y))
 
         for unite in terrain_units:
             x_unit = unite["X"]

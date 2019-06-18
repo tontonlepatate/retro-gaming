@@ -17,7 +17,7 @@ pygame.init()
 
 pygame.display.set_caption("Wargame")
 
-police = pygame.font.SysFont("arial", 15)
+police = pygame.font.SysFont("arial", 15, True)
 
 BLACK = [0, 0, 0]
 WHITE = [255, 255, 255]
@@ -79,7 +79,7 @@ plan = [
 
 terrain_dim = [len(plan[0]), len(plan)]
 
-WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1]]
+WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1] + 1]
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 argent_player = [500, 500]
@@ -267,7 +267,7 @@ while not done:
     elif KeysPressed[pygame.K_PAGEDOWN]:
         case_size -= 1
 
-    WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1]]
+    WINDOW_SIZE = [case_size * terrain_dim[0], case_size * (terrain_dim[1] + 1)]
     screen = pygame.display.set_mode(WINDOW_SIZE)
 
     LABY = np.zeros((terrain_dim[0], terrain_dim[1]), pygame.Surface)
@@ -292,7 +292,12 @@ while not done:
         x = pos[0] // case_size
         y = pos[1] // case_size
         cible_unite = False
-        if lastclick is not True:
+        if y >= terrain_dim[1]:
+            if terrain_dim[0] - 2<= x <= terrain_dim[0]:
+                print("TOUR SUIVANT")
+
+            cible_unite = True
+        elif lastclick is not True:
             lastclick = True
             for unite in terrain_units:
                 xu = unite["X"] * case_size
@@ -372,15 +377,22 @@ while not done:
                 else:
                     trans_case([0, 255, 0], (x_unit, y_unit))
 
-    items = ["argent player 1 : ", "impots player 1 : ", "pts de recherche player 1 : ", "supply du player 1 : ",
-             "argent player 2 : ", "impots player 2 : ", "pts de recherche player 2 : ", "supply du player 2 : "]
+    btn_toursuiv = Surface((case_size * 2, case_size))
+    btn_toursuiv.fill(YELLOW)
+    text = police.render("TOUR SUIVANT", True, BLACK)
+    text = transform.scale(text, (case_size * 2, case_size))
+    btn_toursuiv.blit(text, (0, 0))
+    screen.blit(btn_toursuiv, ((terrain_dim[0] - 2) * case_size, terrain_dim[1] * case_size))
+
+    items = ["argent : ", "impots : ", "pts de recherche : ", "supply : ",
+             "argent : ", "impots : ", "pts de recherche : ", "supply : "]
     variables = [argent_player[0], impots[0], ptsrecherche[0], supply[0], argent_player[1], impots[1], ptsrecherche[1],
                  supply[1]]
     verite = [True, True, True, True, True, True, True, True]
-    colors = [BLACK, BLACK, BLACK, BLACK, WHITE, WHITE, WHITE, WHITE]
-    coordonnées = [(0, 10), (0, 30), (0, 50), (0, 70), (case_size * terrain_dim[0] - 180, 10),
-                   (case_size * terrain_dim[0] - 180, 30), (case_size * terrain_dim[0] - 180, 50),
-                   (case_size * terrain_dim[0] - 180, 70)]
+    colors = [BLUE, BLUE, BLUE, BLUE, RED, RED, RED, RED]
+    coordonnées = [(0, 10), (0, 30), (0, 50), (0, 70), (case_size * terrain_dim[0] - 200, 10),
+                   (case_size * terrain_dim[0] - 200, 30), (case_size * terrain_dim[0] - 200, 50),
+                   (case_size * terrain_dim[0] - 200, 70)]
 
     for i, v, ve, c, co in zip(items, variables, verite, colors, coordonnées):
         text = police.render(i + str(v), ve, c)

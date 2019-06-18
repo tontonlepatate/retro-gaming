@@ -43,8 +43,8 @@ palette = {
     'E': charger_sprite(image1_sprites, 23, 70, 50),  # eau
     'R': charger_sprite(image2_sprites, 13, 210, 50),  # route
     'V': charger_sprite(image4_sprites, 0, 334, 95),  # ville
-    'f': charger_sprite(image2_sprites, 378, 48, 95),  # foret
-    'S': charger_sprite(image2_sprites, 490, 220, 50),  # plage
+    'f': charger_sprite(image2_sprites, 385, 48, 95),  # foret
+    'S': charger_sprite(image2_sprites, 22, 355, 48),  # plage
     'M': charger_sprite(image2_sprites, 671, 47, 95),  # montagne
     'C': charger_sprite(image2_sprites, 576, 47, 95),  # colline
     'P': charger_sprite(image2_sprites, 211, 70, 50),  # plaine
@@ -83,9 +83,9 @@ WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1] + 1]
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 argent_player = [500, 500]
-ptsrecherche = [0, 0]
-supply = [0, 0]
-impots = [0, 0]
+ptsrecherche = [10, 10]
+supply = [10, 10]
+impots = [10, 10]
 
 clock = pygame.time.Clock()
 
@@ -173,6 +173,7 @@ terrain_units = [
         "X": 5,
         "Y": 2,
         "att": False,
+        "hp": 10,
         "deplacement": 10,
         "equipe": 1
     },
@@ -181,6 +182,7 @@ terrain_units = [
         "X": 6,
         "Y": 4,
         "att": False,
+        "hp": 10,
         "deplacement": 10,
         "equipe": 0
     },
@@ -190,6 +192,7 @@ terrain_units = [
         "Y": 8,
         "att": False,
         "deplacement": 10,
+        "hp": 10,
         "equipe": 0
     },
     {
@@ -197,6 +200,7 @@ terrain_units = [
         "X": 0,
         "Y": 0,
         "att": False,
+        "hp": 10,
         "deplacement": 10,
         "equipe": 0
     },
@@ -205,6 +209,7 @@ terrain_units = [
         "X": 10,
         "Y": 10,
         "att": False,
+        "hp": 10,
         "deplacement": 10,
         "equipe": 0
     },
@@ -244,7 +249,7 @@ def attaque_range(id_unite: int, id_cible: int):
     return min <= dist <= max
 
 
-def distance(x1, y1, x2, y2):
+def distance(x1, y1, x2, y2) -> float:
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
 
 
@@ -303,6 +308,7 @@ while not done:
         if y >= terrain_dim[1]:
             if terrain_dim[0] - 2 <= x <= terrain_dim[0] and terrain_dim[1] - 1 <= y <= terrain_dim[0]:
                 print("TOUR SUIVANT")
+                argent_player[tour_equipe] += impots[tour_equipe]
                 tour_equipe = 1 - tour_equipe
                 selected_unit = -1
                 for unite in terrain_units:
@@ -340,7 +346,7 @@ while not done:
             cout = type_unit["terrains"][terrain]
             dep = unite["deplacement"]
 
-            dist = int(distance(x_unit, y_unit, x, y))
+            dist = distance(x_unit, y_unit, x, y)
             if dist == 1 and -1 != cout <= dep:
                 terrain_units[selected_unit]["X"] = x
                 terrain_units[selected_unit]["Y"] = y
@@ -379,14 +385,15 @@ while not done:
             for case_y in range(-1, 2):
                 terrain = plan[y_sct + case_y][x_sct + case_x]
                 cout = sct_type["terrains"][terrain]
-                if dep >= cout != -1:
+                if dep >= cout != -1 and case_y != case_x != -case_y:
                     trans_case([0, 0, 255], (x_sct + case_x, y_sct + case_y))
 
         for unite in terrain_units:
             x_unit = unite["X"]
             y_unit = unite["Y"]
             equipe_unit = unite["equipe"]
-            if attaque_range(selected_unit, terrain_units.index(unite)) and terrain_units[selected_unit]["att"] is False:
+            if attaque_range(selected_unit, terrain_units.index(unite)) \
+                    and terrain_units[selected_unit]["att"] is False:
                 if equipe_unit == equipe_sct:
                     trans_case([255, 0, 0], (x_unit, y_unit))
                 else:
@@ -399,6 +406,8 @@ while not done:
     text = transform.scale(text, (case_size * 2, case_size))
     btn_toursuiv.blit(text, (0, 0))
     screen.blit(btn_toursuiv, ((terrain_dim[0] - 2) * case_size, terrain_dim[1] * case_size))
+
+
 
     # AFFICHAGE DU TOUR
     color = BLUE
@@ -413,14 +422,13 @@ while not done:
              "argent : ", "impots : ", "pts de recherche : ", "supply : "]
     variables = [argent_player[0], impots[0], ptsrecherche[0], supply[0], argent_player[1], impots[1], ptsrecherche[1],
                  supply[1]]
-    verite = [True, True, True, True, True, True, True, True]
     colors = [BLUE, BLUE, BLUE, BLUE, RED, RED, RED, RED]
     coordonnées = [(0, 10), (0, 30), (0, 50), (0, 70), (case_size * terrain_dim[0] - 200, 10),
                    (case_size * terrain_dim[0] - 200, 30), (case_size * terrain_dim[0] - 200, 50),
                    (case_size * terrain_dim[0] - 200, 70)]
 
-    for i, v, ve, c, co in zip(items, variables, verite, colors, coordonnées):
-        text = police.render(i + str(v), ve, c)
+    for i, v, c, co in zip(items, variables, colors, coordonnées):
+        text = police.render(i + str(v), True, c)
         screen.blit(text, co)
 
     clock.tick(30)

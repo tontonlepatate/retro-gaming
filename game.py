@@ -6,6 +6,7 @@ import pygame
 from math import sqrt
 from pygame import transform
 from pygame.draw import rect
+from pygame.font import SysFont
 from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame.transform import scale
@@ -62,6 +63,8 @@ palette = {
 black = (0, 0, 0, 255)
 blue = (0, 0, 255, 255)
 
+base_hp = 100
+
 taille_case = 40
 plan = [
     "PPPPPPPPPSEESPPPPRRR",
@@ -80,6 +83,35 @@ plan = [
     "RBRPPPPPMMMMPPPPRRPP",
     "RRRPPPPMMMMPPPPPPPPP",
 ]
+
+bases = [
+    {
+        "X": 0,
+        "Y": 0,
+        "hp": base_hp,
+    },
+    {
+        "X": 0,
+        "Y": 0,
+        "hp": base_hp,
+    },
+]
+
+x_counter = 0
+y_counter = 0
+base_counter = 0
+for line in plan:
+    for letter in line:
+        if letter == "B":
+            bases[base_counter]["X"] = x_counter
+            bases[base_counter]["Y"] = y_counter
+            if base_counter > 1:
+                raise Exception("Il ne peut y avoir que 2 bases par carte")
+            base_counter += 1
+        x_counter += 1
+    x_counter = 0
+    y_counter += 1
+
 
 terrain_dim = [len(plan[0]), len(plan)]
 
@@ -227,6 +259,7 @@ def trans_case(color, pos):
 
 def changer_tour():
     global tour_equipe
+    global selected_unit
     print("TOUR SUIVANT")
     argent_player[tour_equipe] += impots[tour_equipe]
     tour_equipe = 1 - tour_equipe
@@ -247,7 +280,7 @@ def verifier_touche():
             done = True
             return
         if event.type == pygame.MOUSEBUTTONDOWN:
-            clickHandler()
+            click_handler()
             click = True
     if click is False:
         lastclick = False
@@ -261,13 +294,14 @@ def verifier_touche():
         taille_case -= 1
 
 
-def clickHandler():
+def click_handler():
     global lastclick
     global selected_unit
     global selected_unit_create
     global terrain
     global terrain_dim
     global units
+    global bases
 
     if lastclick:
         return
@@ -314,10 +348,22 @@ def clickHandler():
             # S'il s'agissait d'une unité alors il ne sert à rien de rester dans la fonction
             return
 
+    x_base_adv = bases[1 - tour_equipe]["X"]
+    y_base_adv = bases[1 - tour_equipe]["Y"]
+    sunit = terrain_units[selected_unit]
+    distance_base = distance(sunit.X, sunit.Y, x_base_adv, y_base_adv)
+    if x_base_adv == x_cursor and y_base_adv == y_cursor and selected_unit != -1 and sunit.att is False \
+            and sunit.classeunite.cible.start <= distance_base <= sunit.classeunite.cible.stop:
+        bases[1 - tour_equipe]["hp"] -= sunit.classeunite.stat["softattack"]
+        sunit.att = True
+        return
+
     # Si on ne clique pas sur une unité
 
     # Si une unité est sur le point d'être acheté
-    if selected_unit_create != -1:
+    x_base_all = bases[tour_equipe]["X"]
+    y_base_all = bases[tour_equipe]["Y"]
+    if selected_unit_create != -1 and distance(x_base_all, y_base_all, x_cursor, y_cursor) < 2:
         type_u = units[units_id[selected_unit_create]]
         cout = type_u.stat["cost"]
 
@@ -364,19 +410,13 @@ def afficher_terrain():
             image = transform.scale(p, (taille_case, taille_case))
             screen.blit(image, [xpix, ypix])
 
+    trans_case(BLUE, (bases[0]["X"], bases[0]["Y"]))
+    afficher_hp(bases[0]["hp"], bases[0]["X"], bases[0]["Y"])
+    trans_case(RED, (bases[1]["X"], bases[1]["Y"]))
+    afficher_hp(bases[1]["hp"], bases[1]["X"], bases[1]["Y"])
 
-while not done:
-    units_id = []
-    for unite in units:
-        units_id.append(unite)
 
-    verifier_touche()
-    WINDOW_SIZE = [taille_case * terrain_dim[0], taille_case * (terrain_dim[1] + 1)]
-    screen = pygame.display.set_mode(WINDOW_SIZE)
-
-    afficher_terrain()
-
-    # Affichage des unités
+def afficher_unite():
     for unite in terrain_units:
         cible_id = terrain_units.index(unite)
 
@@ -395,17 +435,36 @@ while not done:
         screen.blit(icon_unite, (int((unite.X + 1 / 4) * taille_case), int((unite.Y + 1 / 4) * taille_case)))
 
         # Affichage des HP
-        hp_text = police.render("HP: " + str(terrain_units[cible_id].hp), True, WHITE)
-        hp_text_rat = hp_text.get_height() / hp_text.get_width()
-        hp_text = scale(hp_text, (taille_case, int(taille_case * hp_text_rat)))
+        afficher_hp(terrain_units[cible_id].hp, terrain_units[cible_id].X, terrain_units[cible_id].Y)
 
-        hp_surface = Surface((taille_case, int(taille_case * hp_text_rat)))
-        hp_surface.fill((0, 0, 0))
-        hp_surface.set_alpha(100)
 
-        hp_surface.blit(hp_text, (0, 0))
-        screen.blit(hp_surface,
-                    (terrain_units[cible_id].X * taille_case, terrain_units[cible_id].Y * taille_case))
+def afficher_hp(hp: int, x, y):
+    hp_text = police.render("HP: " + str(hp), True, WHITE)
+    hp_text_rat = hp_text.get_height() / hp_text.get_width()
+    hp_text = scale(hp_text, (taille_case, int(taille_case * hp_text_rat)))
+
+    hp_surface = Surface((taille_case, int(taille_case * hp_text_rat)))
+    hp_surface.fill((0, 0, 0))
+    hp_surface.set_alpha(100)
+
+    hp_surface.blit(hp_text, (0, 0))
+    screen.blit(hp_surface,
+                (x * taille_case, y * taille_case))
+
+
+while not done:
+    units_id = []
+    for unite in units:
+        units_id.append(unite)
+
+    verifier_touche()
+    WINDOW_SIZE = [taille_case * terrain_dim[0], taille_case * (terrain_dim[1] + 1)]
+    screen = pygame.display.set_mode(WINDOW_SIZE)
+
+    afficher_terrain()
+
+    # Affichage des unités
+    afficher_unite()
 
     # Affichage des indications
     if selected_unit is not -1:
@@ -476,6 +535,13 @@ while not done:
             frame_unite.fill((0, 0, 0))
         frame_unite.blit(image_unite, (2, 2))
         screen.blit(frame_unite, (taille_case * unite, taille_case * terrain_dim[1]))
+
+    for base in bases:
+        if base["hp"] <= 0:
+            winr = SysFont("arial", 50, True).render("EQUIPE " + str(1 + (1 - bases.index(base))) + " GAGNE", True,
+                                                     YELLOW)
+            w, h = winr.get_size()
+            screen.blit(scale(winr, (WINDOW_SIZE[0], int(h / w * WINDOW_SIZE[1]))), (0, WINDOW_SIZE[1] // 2))
     clock.tick(30)
 
     pygame.display.flip()

@@ -201,11 +201,7 @@ units = {
 units_id = []
 
 terrain_units = [
-    Unite(5, 2, 1, units["fusilier"]),
-    Unite(6, 4, 0, units["tank"]),
-    Unite(12, 8, 0, units["tank"]),
-    Unite(0, 0, 0, units["tank"]),
-    Unite(10, 10, 0, units["fusilier"]),
+    Unite(WINDOW_SIZE[0], WINDOW_SIZE[1], 1, units["fusilier"]),
 ]
 done = False
 

@@ -5,10 +5,13 @@ import numpy as np
 import pygame
 from math import sqrt
 from pygame import transform
-from pygame.draw import circle, rect
+from pygame.draw import rect
 from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame.transform import scale
+
+from classunite import ClasseUnite
+from unite import Unite
 
 scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
 scriptDIR = os.path.dirname(scriptPATH)
@@ -59,7 +62,7 @@ palette = {
 black = (0, 0, 0, 255)
 blue = (0, 0, 255, 255)
 
-case_size = 40
+taille_case = 40
 plan = [
     "PPPPPPPPPSEESPPPPRRR",
     "PfffPPPPPSEESPPPPRBR",
@@ -80,7 +83,7 @@ plan = [
 
 terrain_dim = [len(plan[0]), len(plan)]
 
-WINDOW_SIZE = [case_size * terrain_dim[0], case_size * terrain_dim[1] + 1]
+WINDOW_SIZE = [taille_case * terrain_dim[0], taille_case * terrain_dim[1] + 1]
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 argent_player = [500, 500]
@@ -97,131 +100,80 @@ care_bleu = pygame.Surface((1, 1))
 care_bleu.fill((0, 0, 255))
 
 units = {
-    "tank": {
-        "sprite": care_bleu,
-        "terrains": {
-            'B': 1,  # base
-            'E': -1,  # eau
-            'R': 1,  # route
-            'V': -1,  # ville
-            'f': 2,  # foret
-            'S': 2,  # plage
-            'M': -1,  # montagne
-            'C': 2,  # colline
-            'P': 1,  # plaine
-            'F': -1,  # fort
-            'T': -1,  # recherche
-            'U': -1,  # Usine M
-            'u': -1,  # Usine C
-            ' ': -1  # void
-        },
-        "cible": {
-            "min": 1,
-            "max": 4
-        },
-        "stat": {  # tintin's stat
-            "movepoint": 8,  # point de mouvement
-            "cost": 1000,  # argent requis lors du recrutement
-            "manpower": 10000,  # man power requis "		"
-            "supplies": 5,  # point de supplie "		"
-            "defaultorga": 50,  # multiplicateur globale de l'efficacité de l'unité [0-100]
-            "defensiveness": 50,  # stat défensive[0-100]
-            "toughness": 80,  # point de vie (Hard) (toughness+softness=100)
-            "softness": 20,  # point de vie (soft)
-            "airdefence": 10,  # stat défensive anti-aérien[0-100] (réduction des dégat subit)
-            "softattack": 20,  # stat attaque (Soft)
-            "hardattack": 80,  # stat attaque (Hard)
-            "airattack": 10  # stat attaque anti-aérien (dégat infliger)
-        },
-    },
-
-    "fusilier": {
-        "sprite": care_vert,
-        "terrains": {
-            'B': 1,  # base
-            'E': 1,  # eau
-            'R': 1,  # route
-            'V': -1,  # ville
-            'f': 3,  # foret
-            'S': 3,  # plage
-            'M': -1,  # montagne
-            'C': 2,  # colline
-            'P': 1,  # plaine
-            'F': 1,  # fort
-            'T': 1,  # recherche
-            'U': 1,  # Usine M
-            'u': 1,  # Usine C
-            ' ': -1  # void
-        },
-        "cible": {
-            "min": 0,
-            "max": 3
-        },
-        "stat": {  # tintin's stat
-            "movepoint": 4,
-            "cost": 100,
-            "manpower": 10000,
-            "supplies": 1,
-            "defaultorga": 50,
-            "defensiveness": 10,
-            "toughness": 10,
-            "softness": 90,
-            "airdefence": 20,
-            "softattack": 80,
-            "hardattack": 10,
-            "airattack": 10
-        },
-    },
+    "tank": ClasseUnite("tank", care_bleu, range(1, 4),
+                        {  # tintin's stat
+                            "movepoint": 8,  # point de mouvement
+                            "cost": 1000,  # argent requis lors du recrutement
+                            "manpower": 10000,  # man power requis "		"
+                            "supplies": 5,  # point de supplie "		"
+                            "defaultorga": 50,  # multiplicateur globale de l'efficacité de l'unité [0-100]
+                            "defensiveness": 50,  # stat défensive[0-100]
+                            "toughness": 80,  # point de vie (Hard) (toughness+softness=100)
+                            "softness": 20,  # point de vie (soft)
+                            "airdefence": 10,  # stat défensive anti-aérien[0-100] (réduction des dégat subit)
+                            "softattack": 20,  # stat attaque (Soft)
+                            "hardattack": 80,  # stat attaque (Hard)
+                            "airattack": 10,  # stat attaque anti-aérien (dégat infliger),
+                            "hp": 100
+                        },
+                        {
+                            'B': 1,  # base
+                            'E': -1,  # eau
+                            'R': 1,  # route
+                            'V': -1,  # ville
+                            'f': 2,  # foret
+                            'S': 2,  # plage
+                            'M': -1,  # montagne
+                            'C': 2,  # colline
+                            'P': 1,  # plaine
+                            'F': -1,  # fort
+                            'T': -1,  # recherche
+                            'U': -1,  # Usine M
+                            'u': -1,  # Usine C
+                            ' ': -1  # void
+                        }),
+    "fusilier": ClasseUnite("fusilier", care_vert, range(0, 3),
+                            {
+                                "movepoint": 4,
+                                "cost": 100,
+                                "manpower": 10000,
+                                "supplies": 1,
+                                "defaultorga": 50,
+                                "defensiveness": 10,
+                                "toughness": 10,
+                                "softness": 90,
+                                "airdefence": 20,
+                                "softattack": 80,
+                                "hardattack": 10,
+                                "airattack": 10,
+                                "hp": 10
+                            },
+                            {
+                                'B': 1,  # base
+                                'E': -1,  # eau
+                                'R': 1,  # route
+                                'V': -1,  # ville
+                                'f': 2,  # foret
+                                'S': 2,  # plage
+                                'M': -1,  # montagne
+                                'C': 2,  # colline
+                                'P': 1,  # plaine
+                                'F': -1,  # fort
+                                'T': -1,  # recherche
+                                'U': -1,  # Usine M
+                                'u': -1,  # Usine C
+                                ' ': -1  # void
+                            })
 }
 
 units_id = []
 
 terrain_units = [
-    {
-        "type": "fusilier",
-        "X": 5,
-        "Y": 2,
-        "att": False,
-        "hp": 100,
-        "deplacement": 10,
-        "equipe": 1
-    },
-    {
-        "type": "tank",
-        "X": 6,
-        "Y": 4,
-        "att": False,
-        "hp": 10,
-        "deplacement": 10,
-        "equipe": 0
-    },
-    {
-        "type": "tank",
-        "X": 12,
-        "Y": 8,
-        "att": False,
-        "deplacement": 10,
-        "hp": 10,
-        "equipe": 0
-    },
-    {
-        "type": "tank",
-        "X": 0,
-        "Y": 0,
-        "att": False,
-        "hp": 10,
-        "deplacement": 10,
-        "equipe": 0
-    },
-    {
-        "type": "fusilier",
-        "X": 10,
-        "Y": 10,
-        "att": False,
-        "hp": 10,
-        "deplacement": 10,
-        "equipe": 0
-    },
+    Unite(5, 2, 1, units["fusilier"]),
+    Unite(6, 4, 0, units["tank"]),
+    Unite(12, 8, 0, units["tank"]),
+    Unite(0, 0, 0, units["tank"]),
+    Unite(10, 10, 0, units["fusilier"]),
 ]
 done = False
 
@@ -233,17 +185,17 @@ tour_equipe = 0
 
 
 def equipe_differente(unite1: int, unite2: int) -> bool:
-    return terrain_units[unite1]["equipe"] != terrain_units[unite2]["equipe"]
+    return terrain_units[unite1].equipe != terrain_units[unite2].equipe
 
 
 def attaque(id_unite: int, id_cible: int):
     print(str(id_unite) + " attaque " + str(id_cible))
-    terrain_units[id_unite]["att"] = True
+    terrain_units[id_unite].att = True
     unite = terrain_units[id_unite]
     cible = terrain_units[id_cible]
     # Début de attaque
-    cible["hp"] -= 10
-    if cible["hp"] <= 0:
+    cible.hp -= 10
+    if cible.hp <= 0:
         terrain_units.remove(cible)
         return
     # Fin de attaque
@@ -254,11 +206,11 @@ def attaque(id_unite: int, id_cible: int):
 def attaque_range(id_unite: int, id_cible: int):
     if id_unite == id_cible:
         return False
-    type = units[terrain_units[id_unite]["type"]]
-    min = float(type["cible"]["min"])
-    max = float(type["cible"]["max"])
-    dist = distance(terrain_units[id_unite]["X"], terrain_units[id_unite]["Y"],
-                    terrain_units[id_cible]["X"], terrain_units[id_cible]["Y"])
+    type = terrain_units[id_unite].classeunite
+    min = float(type.cible.start)
+    max = float(type.cible.stop)
+    dist = distance(terrain_units[id_unite].X, terrain_units[id_unite].Y,
+                    terrain_units[id_cible].X, terrain_units[id_cible].Y)
     return min <= dist <= max
 
 
@@ -267,16 +219,150 @@ def distance(x1, y1, x2, y2) -> float:
 
 
 def trans_case(color, pos):
-    s = Surface((case_size, case_size))
+    s = Surface((taille_case, taille_case))
     s.set_alpha(100)
     s.fill(color)
-    screen.blit(s, (pos[0] * case_size, pos[1] * case_size))
+    screen.blit(s, (pos[0] * taille_case, pos[1] * taille_case))
 
 
-def deplacement(id_unite):
-    unite = terrain_units[id_unite]
+def changer_tour():
+    global tour_equipe
+    print("TOUR SUIVANT")
+    argent_player[tour_equipe] += impots[tour_equipe]
+    tour_equipe = 1 - tour_equipe
+    selected_unit = -1
+    for unite in terrain_units:
+        if unite.equipe == tour_equipe:
+            unite.nouveau_tour()
 
-    terrain_units[id_unite] = unite
+
+def verifier_touche():
+    global taille_case
+    global lastclick
+    global done
+
+    click = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+            return
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            clickHandler()
+            click = True
+    if click is False:
+        lastclick = False
+    pygame.event.pump()
+
+    keys_pressed = pygame.key.get_pressed()
+    if keys_pressed[pygame.K_PAGEUP]:
+        taille_case += 1
+
+    elif keys_pressed[pygame.K_PAGEDOWN]:
+        taille_case -= 1
+
+
+def clickHandler():
+    global lastclick
+    global selected_unit
+    global selected_unit_create
+    global terrain
+    global terrain_dim
+    global units
+
+    if lastclick:
+        return
+    else:
+        lastclick = True
+
+    pos = pygame.mouse.get_pos()
+    x_cursor = pos[0] // taille_case
+    y_cursor = pos[1] // taille_case
+
+    # Gestion de la barre d'outils
+    if y_cursor >= terrain_dim[1]:
+        # BTN tour suivant
+        if terrain_dim[0] - 2 <= x_cursor <= terrain_dim[0] and terrain_dim[1] - 1 <= y_cursor <= terrain_dim[0]:
+            changer_tour()
+        # Création d'unite
+        elif x_cursor == selected_unit_create:
+            selected_unit_create = -1
+        elif x_cursor < len(units_id):
+            selected_unit_create = x_cursor
+        return
+
+    # Gestion du clique sur unité
+    for unite in terrain_units:
+        xu = unite.X * taille_case
+        yu = unite.Y * taille_case
+
+        # Detection de la collision (entre la souris et l'unité)
+        rect_col = Rect(xu, yu, taille_case, taille_case)
+        if rect_col.collidepoint(x_cursor * taille_case, y_cursor * taille_case):
+            cible_id = terrain_units.index(unite)
+            if cible_id != selected_unit:
+                # Si une unité est déjà select
+                if selected_unit != -1:
+                    if equipe_differente(selected_unit, cible_id) and attaque_range(selected_unit, cible_id) \
+                            and terrain_units[selected_unit].att is False:
+                        attaque(selected_unit, cible_id)
+                    selected_unit = -1
+                elif terrain_units[cible_id].equipe == tour_equipe:
+                    selected_unit = cible_id
+            else:
+                selected_unit = -1
+
+            # S'il s'agissait d'une unité alors il ne sert à rien de rester dans la fonction
+            return
+
+    # Si on ne clique pas sur une unité
+
+    # Si une unité est sur le point d'être acheté
+    if selected_unit_create != -1:
+        type_u = units[units_id[selected_unit_create]]
+        cout = type_u.stat["cost"]
+
+        if cout < argent_player[tour_equipe]:
+            argent_player[tour_equipe] -= cout
+            terrain_units.append(
+                Unite(int(x_cursor), int(y_cursor), tour_equipe, units[units_id[selected_unit_create]]))
+        else:
+            print("Pas assez d'argent pour acheter l'unité")
+
+        selected_unit_create = -1
+        return
+
+    # Si une unité est select
+    elif selected_unit != -1:
+        unite = terrain_units[selected_unit]
+        x_unit = unite.X
+        y_unit = unite.Y
+        terrain = plan[y_cursor][x_cursor]
+        cout = unite.classeunite.terrain[terrain]
+        dep = unite.pts_dep
+
+        dist = distance(x_unit, y_unit, x_cursor, y_cursor)
+        if dist == 1 and -1 != cout <= dep:
+            terrain_units[selected_unit].deplacer(x_cursor, y_cursor, cout)
+        return
+
+
+def afficher_terrain():
+    laby = np.zeros((terrain_dim[0], terrain_dim[1]), pygame.Surface)
+    for y in range(terrain_dim[1]):
+        ligne = plan[y]
+        for x in range(terrain_dim[0]):
+            c = ligne[x]
+            laby[x, y] = palette[c]
+
+    for ix in range(terrain_dim[0]):
+        for iy in range(terrain_dim[1]):
+            xpix = taille_case * ix
+            ypix = taille_case * iy
+            p = laby[ix, iy]
+            image = transform.scale(palette['P'], (taille_case, taille_case))
+            screen.blit(image, [xpix, ypix])
+            image = transform.scale(p, (taille_case, taille_case))
+            screen.blit(image, [xpix, ypix])
 
 
 while not done:
@@ -284,196 +370,87 @@ while not done:
     for unite in units:
         units_id.append(unite)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-
-    pygame.event.pump()
-
-    KeysPressed = pygame.key.get_pressed()
-    if KeysPressed[pygame.K_PAGEUP]:
-        case_size += 1
-
-    elif KeysPressed[pygame.K_PAGEDOWN]:
-        case_size -= 1
-
-    WINDOW_SIZE = [case_size * terrain_dim[0], case_size * (terrain_dim[1] + 1)]
+    verifier_touche()
+    WINDOW_SIZE = [taille_case * terrain_dim[0], taille_case * (terrain_dim[1] + 1)]
     screen = pygame.display.set_mode(WINDOW_SIZE)
 
-    LABY = np.zeros((terrain_dim[0], terrain_dim[1]), pygame.Surface)
-    for y in range(terrain_dim[1]):
-        ligne = plan[y]
-        for x in range(terrain_dim[0]):
-            c = ligne[x]
-            LABY[x, y] = palette[c]
-
-    for ix in range(terrain_dim[0]):
-        for iy in range(terrain_dim[1]):
-            xpix = case_size * ix
-            ypix = case_size * iy
-            p = LABY[ix, iy]
-            image = transform.scale(palette['P'], (case_size, case_size))
-            screen.blit(image, [xpix, ypix])
-            image = transform.scale(p, (case_size, case_size))
-            screen.blit(image, [xpix, ypix])
-
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        pos = pygame.mouse.get_pos()
-        x = pos[0] // case_size
-        y = pos[1] // case_size
-        cible_unite = False
-        if y >= terrain_dim[1]:
-            # BTN tour suivant
-            if terrain_dim[0] - 2 <= x <= terrain_dim[0] and terrain_dim[1] - 1 <= y <= terrain_dim[0]:
-                print("TOUR SUIVANT")
-                argent_player[tour_equipe] += impots[tour_equipe]
-                tour_equipe = 1 - tour_equipe
-                selected_unit = -1
-                for unite in terrain_units:
-                    if unite["equipe"] == tour_equipe:
-                        unite["att"] = False
-                        unite["deplacement"] = 10
-            # Création d'unite
-            elif x == selected_unit_create:
-                selected_unit_create = -1
-            elif x < len(units_id):
-                selected_unit_create = x
-
-            cible_unite = True
-        elif lastclick is not True:
-            lastclick = True
-            for unite in terrain_units:
-                xu = unite["X"] * case_size
-                yu = unite["Y"] * case_size
-                rectcol = Rect(xu, yu, case_size, case_size)
-                cible_id = terrain_units.index(unite)
-
-                if rectcol.collidepoint(x * case_size, y * case_size):
-                    cible_unite = True
-                    if cible_id != selected_unit:
-                        if selected_unit != -1:
-                            if equipe_differente(selected_unit, cible_id) and attaque_range(selected_unit, cible_id) \
-                                    and terrain_units[selected_unit]["att"] is False:
-                                attaque(selected_unit, cible_id)
-                            selected_unit = -1
-                        elif terrain_units[cible_id]["equipe"] == tour_equipe:
-                            selected_unit = cible_id
-                    else:
-                        selected_unit = -1
-        if (cible_unite is False) and (selected_unit_create != -1):
-            type_u = units[units_id[selected_unit_create]]
-            cout = type_u["stat"]["cost"]
-
-            if cout < argent_player[tour_equipe]:
-                argent_player[tour_equipe] -= cout
-                new_unit = {
-                    "type": units_id[selected_unit_create],
-                    "X": int(x),
-                    "Y": int(y),
-                    "att": True,
-                    "hp": 100,
-                    "deplacement": 10,
-                    "equipe": tour_equipe
-                }
-                terrain_units.append(new_unit)
-            else:
-                print("Pas assez d'argent pour acheter l'unité")
-
-            selected_unit_create = -1
-
-        if (cible_unite is False) and (selected_unit != -1):
-            unite = terrain_units[selected_unit]
-            x_unit = unite["X"]
-            y_unit = unite["Y"]
-            type_unit = units[unite["type"]]
-            terrain = plan[y][x]
-            cout = type_unit["terrains"][terrain]
-            dep = unite["deplacement"]
-
-            dist = distance(x_unit, y_unit, x, y)
-            if dist == 1 and -1 != cout <= dep:
-                terrain_units[selected_unit]["X"] = x
-                terrain_units[selected_unit]["Y"] = y
-                terrain_units[selected_unit]["deplacement"] -= cout
-    else:
-        lastclick = False
+    afficher_terrain()
 
     # Affichage des unités
     for unite in terrain_units:
         cible_id = terrain_units.index(unite)
 
         if selected_unit == cible_id:
-            select_rect = Rect(unite["X"] * case_size, unite["Y"] * case_size, case_size, case_size)
+            select_rect = Rect(unite.X * taille_case, unite.Y * taille_case, taille_case, taille_case)
             rect(screen, [255, 100, 0], select_rect)
 
-        icon_unite = scale(units[unite["type"]]["sprite"], (case_size // 2, case_size // 2))
+        icon_unite = scale(unite.classeunite.sprite, (taille_case // 2, taille_case // 2))
         filtre_equipe = Surface((icon_unite.get_width(), icon_unite.get_height()))
         filtre_equipe.set_alpha(100)
-        if unite["equipe"] == 1:
+        if unite.equipe == 1:
             filtre_equipe.fill(BLUE)
         else:
             filtre_equipe.fill(RED)
         icon_unite.blit(filtre_equipe, (0, 0))
-        screen.blit(icon_unite, (int((unite["X"] + 1 / 4) * case_size), int((unite["Y"] + 1 / 4) * case_size)))
+        screen.blit(icon_unite, (int((unite.X + 1 / 4) * taille_case), int((unite.Y + 1 / 4) * taille_case)))
 
         # Affichage des HP
-        hp_text = police.render("HP: " + str(terrain_units[cible_id]["hp"]), True, WHITE)
+        hp_text = police.render("HP: " + str(terrain_units[cible_id].hp), True, WHITE)
         hp_text_rat = hp_text.get_height() / hp_text.get_width()
-        hp_text = scale(hp_text, (case_size, int(case_size * hp_text_rat)))
+        hp_text = scale(hp_text, (taille_case, int(taille_case * hp_text_rat)))
 
-        hp_surface = Surface((case_size, int(case_size * hp_text_rat)))
+        hp_surface = Surface((taille_case, int(taille_case * hp_text_rat)))
         hp_surface.fill((0, 0, 0))
         hp_surface.set_alpha(100)
 
         hp_surface.blit(hp_text, (0, 0))
         screen.blit(hp_surface,
-                    (terrain_units[cible_id]["X"] * case_size, terrain_units[cible_id]["Y"] * case_size))
+                    (terrain_units[cible_id].X * taille_case, terrain_units[cible_id].Y * taille_case))
 
+    # Affichage des indications
     if selected_unit is not -1:
-        pos = pygame.mouse.get_pos()
-        x = pos[0] // case_size
-        y = pos[1] // case_size
-
         sct_unite = terrain_units[selected_unit]
-        sct_type = units[sct_unite["type"]]
-        x_sct = sct_unite["X"]
-        y_sct = sct_unite["Y"]
-        equipe_sct = sct_unite["equipe"]
-        dep = sct_unite["deplacement"]
+        sct_type = sct_unite.classeunite
+        x_sct = sct_unite.X
+        y_sct = sct_unite.Y
+        equipe_sct = sct_unite.equipe
+        dep = sct_unite.pts_dep
 
+        # Affichage des indications de déplacement
         for case_x in range(-1, 2):
             for case_y in range(-1, 2):
                 terrain = plan[y_sct + case_y][x_sct + case_x]
-                cout = sct_type["terrains"][terrain]
+                cout = sct_type.terrain[terrain]
                 if dep >= cout != -1 and case_y != case_x != -case_y:
                     trans_case([0, 0, 255], (x_sct + case_x, y_sct + case_y))
 
+        # Affichage des indications de destruction
         for unite in terrain_units:
-            x_unit = unite["X"]
-            y_unit = unite["Y"]
-            equipe_unit = unite["equipe"]
+            x_unit = unite.X
+            y_unit = unite.Y
+            equipe_unit = unite.equipe
             if attaque_range(selected_unit, terrain_units.index(unite)) \
-                    and terrain_units[selected_unit]["att"] is False:
+                    and terrain_units[selected_unit].att is False:
                 if equipe_unit == equipe_sct:
                     trans_case([255, 0, 0], (x_unit, y_unit))
                 else:
                     trans_case([0, 255, 0], (x_unit, y_unit))
 
-    # BOUTON TOUR SUIVANT
-    btn_toursuiv = Surface((case_size * 2, case_size))
+    # Affichage bouton TOUR SUIVANT
+    btn_toursuiv = Surface((taille_case * 2, taille_case))
     btn_toursuiv.fill(YELLOW)
     text = police.render("TOUR SUIVANT", True, BLACK)
-    text = transform.scale(text, (case_size * 2, case_size))
+    text = transform.scale(text, (taille_case * 2, taille_case))
     btn_toursuiv.blit(text, (0, 0))
-    screen.blit(btn_toursuiv, ((terrain_dim[0] - 2) * case_size, terrain_dim[1] * case_size))
+    screen.blit(btn_toursuiv, ((terrain_dim[0] - 2) * taille_case, terrain_dim[1] * taille_case))
 
     # AFFICHAGE DU TOUR
     color = BLUE
     if tour_equipe == 1:
         color = RED
     text = police.render("TOUR DE L'EQUIPE " + str(tour_equipe + 1), True, color)
-    text = transform.scale(text, (case_size * 4, case_size))
-    screen.blit(text, ((terrain_dim[0] - 4) // 2 * case_size, 0))
+    text = transform.scale(text, (taille_case * 4, taille_case))
+    screen.blit(text, ((terrain_dim[0] - 4) // 2 * taille_case, 0))
 
     # AFFICHAGE DES INFOS JOUEUR
     items = ["argent : ", "impots : ", "pts de recherche : ", "supply : ",
@@ -481,24 +458,24 @@ while not done:
     variables = [argent_player[0], impots[0], ptsrecherche[0], supply[0], argent_player[1], impots[1], ptsrecherche[1],
                  supply[1]]
     colors = [BLUE, BLUE, BLUE, BLUE, RED, RED, RED, RED]
-    coordonnées = [(0, 10), (0, 30), (0, 50), (0, 70), (case_size * terrain_dim[0] - 200, 10),
-                   (case_size * terrain_dim[0] - 200, 30), (case_size * terrain_dim[0] - 200, 50),
-                   (case_size * terrain_dim[0] - 200, 70)]
+    coordonnees = [(0, 10), (0, 30), (0, 50), (0, 70), (taille_case * terrain_dim[0] - 200, 10),
+                   (taille_case * terrain_dim[0] - 200, 30), (taille_case * terrain_dim[0] - 200, 50),
+                   (taille_case * terrain_dim[0] - 200, 70)]
 
-    for i, v, c, co in zip(items, variables, colors, coordonnées):
+    for i, v, c, co in zip(items, variables, colors, coordonnees):
         text = police.render(i + str(v), True, c)
         screen.blit(text, co)
 
     for unite in range(0, len(units_id)):
         unite_src = units[units_id[unite]]
-        image_unite = scale(unite_src["sprite"], (case_size - 4, case_size - 4))
-        frame_unite = Surface((case_size, case_size))
+        image_unite = scale(unite_src.sprite, (taille_case - 4, taille_case - 4))
+        frame_unite = Surface((taille_case, taille_case))
         if unite == selected_unit_create:
             frame_unite.fill((255, 255, 0))
         else:
             frame_unite.fill((0, 0, 0))
         frame_unite.blit(image_unite, (2, 2))
-        screen.blit(frame_unite, (case_size * unite, case_size * terrain_dim[1]))
+        screen.blit(frame_unite, (taille_case * unite, taille_case * terrain_dim[1]))
     clock.tick(30)
 
     pygame.display.flip()

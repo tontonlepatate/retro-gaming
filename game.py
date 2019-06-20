@@ -12,12 +12,15 @@ from pygame.surface import Surface
 from pygame.transform import scale
 
 from classunite import ClasseUnite
-from common import palette, BLUE, RED, WHITE, YELLOW, BLACK
+from common import palette, BLUE, RED, WHITE, YELLOW, BLACK, scriptDIR
 from unite import Unite
 
 pygame.init()
 
 pygame.display.set_caption("Wargame")
+
+son = pygame.mixer.Sound(os.path.join(scriptDIR, "musique/hoi2-kriegsgewitter.wav"))
+son.play(loops=-1)
 
 police = pygame.font.SysFont("arial", 15, True)
 
@@ -431,10 +434,13 @@ while not done:
         # Affichage des indications de déplacement
         for case_x in range(-1, 2):
             for case_y in range(-1, 2):
-                terrain = plan[y_sct + case_y][x_sct + case_x]
-                cout = sct_type.terrain[terrain]
-                if dep >= cout != -1 and case_y != case_x != -case_y:
-                    trans_case([0, 0, 255], (x_sct + case_x, y_sct + case_y))
+                try:
+                    terrain = plan[y_sct + case_y][x_sct + case_x]
+                    cout = sct_type.terrain[terrain]
+                    if dep >= cout != -1 and case_y != case_x != -case_y:
+                        trans_case([0, 0, 255], (x_sct + case_x, y_sct + case_y))
+                except:
+                    ""
 
         # Affichage des indications de destruction
         for unite in terrain_units:

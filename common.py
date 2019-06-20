@@ -14,6 +14,8 @@ scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible int
 scriptDIR = os.path.dirname(scriptPATH)
 assets = os.path.join(scriptDIR, "data")
 
+
+
 BLACK = [0, 0, 0]
 WHITE = [255, 255, 255]
 GREEN = [0, 255, 0]

@@ -14,8 +14,6 @@ scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible int
 scriptDIR = os.path.dirname(scriptPATH)
 assets = os.path.join(scriptDIR, "data")
 
-
-
 BLACK = [0, 0, 0]
 WHITE = [255, 255, 255]
 GREEN = [0, 255, 0]
@@ -42,5 +40,5 @@ palette = {
     'T': charger_sprite(image4_sprites, 470, 188, 95),  # recherche
     'U': charger_sprite(image4_sprites, 376, 188, 95),  # Usine M
     'u': charger_sprite(image4_sprites, 376, 282, 95),  # Usine C
-    ' ': charger_sprite(image2_sprites, 211, 70, 50), # void
+    ' ': charger_sprite(image2_sprites, 211, 70, 50),  # void
 }  # initialise un dictionnaire

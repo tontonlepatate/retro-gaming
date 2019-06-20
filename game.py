@@ -93,103 +93,103 @@ care_bleu.fill((0, 0, 255))
 
 units = {
 
-    "infanterie": ClasseUnite("infanterie", care_vert, range(1, 1),
-                            {
-                                "movepoint": 4,
-                                "cost": 500,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 15
-                            },
-                            {
-                                'B': 1,  # base
-                                'E': 2,  # eau
-                                'R': 0.5,  # route
-                                'V': 1,  # ville
-                                'f': 1.5,  # foret
-                                'S': 1,  # plage
-                                'M': 4,  # montagne
-                                'C': 2,  # colline
-                                'P': 1,  # plaine
-                                'F': 1,  # fort
-                                'T': 1,  # recherche
-                                'U': 1,  # Usine M
-                                'u': 1, # Usine C
-                                ' ': -1  # void
-                            }),
-    "infMontagne": ClasseUnite("infanterie de montagne", care_vert, range(1, 1),
-                            {
-                                "movepoint": 4,
-                                "cost": 650,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 15
-                            },
-                            {
-                                'B': 1,  # base
-                                'E': 2,  # eau
-                                'R': 0.5,  # route
-                                'V': 1,  # ville
-                                'f': 1.5,  # foret
-                                'S': 1,  # plage
-                                'M': 1.5,  # montagne
-                                'C': 1,  # colline
-                                'P': 1,  # plaine
-                                'F': 1,  # fort
-                                'T': 1,  # recherche
-                                'U': 1,  # Usine M
-                                'u': 1,  # Usine C
-                                ' ': -1  # void
-                            }),
-    "genie": ClasseUnite("génie", care_vert, range(1, 1),
-                            {
-                                "movepoint": 4,
-                                "cost": 800,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 15
-                            },
-                            {
-                                'B': 1,  # base
-                                'E': 1.5,  # eau
-                                'R': 0.5,  # route
-                                'V': 1,  # ville
-                                'f': 1.5,  # foret
-                                'S': 1,  # plage
-                                'M': 3,  # montagne
-                                'C': 2,  # colline
-                                'P': 1,  # plaine
-                                'F': 1,  # fort
-                                'T': 1,  # recherche
-                                'U': 1,  # Usine M
-                                'u': 1,  # Usine C
-                                ' ': -1  # void
-                            }),
-    "hopitale": ClasseUnite("unité médicale", care_vert, range(1, 2),
+    "infanterie": ClasseUnite("infanterie", care_vert, care_vert, range(1, 1),
+                              {
+                                  "movepoint": 4,
+                                  "cost": 500,
+                                  "manpower": 10000,
+                                  "supplies": 1,
+                                  "defaultorga": 50,
+                                  "defensiveness": 10,
+                                  "toughness": 10,
+                                  "softness": 90,
+                                  "airdefence": 20,
+                                  "softattack": 80,
+                                  "hardattack": 10,
+                                  "airattack": 10,
+                                  "hp": 15
+                              },
+                              {
+                                  'B': 1,  # base
+                                  'E': 2,  # eau
+                                  'R': 0.5,  # route
+                                  'V': 1,  # ville
+                                  'f': 1.5,  # foret
+                                  'S': 1,  # plage
+                                  'M': 4,  # montagne
+                                  'C': 2,  # colline
+                                  'P': 1,  # plaine
+                                  'F': 1,  # fort
+                                  'T': 1,  # recherche
+                                  'U': 1,  # Usine M
+                                  'u': 1,  # Usine C
+                                  ' ': -1  # void
+                              }),
+    "infMontagne": ClasseUnite("infanterie de montagne", care_vert, care_vert, range(1, 1),
+                               {
+                                   "movepoint": 4,
+                                   "cost": 650,
+                                   "manpower": 10000,
+                                   "supplies": 1,
+                                   "defaultorga": 50,
+                                   "defensiveness": 10,
+                                   "toughness": 10,
+                                   "softness": 90,
+                                   "airdefence": 20,
+                                   "softattack": 80,
+                                   "hardattack": 10,
+                                   "airattack": 10,
+                                   "hp": 15
+                               },
+                               {
+                                   'B': 1,  # base
+                                   'E': 2,  # eau
+                                   'R': 0.5,  # route
+                                   'V': 1,  # ville
+                                   'f': 1.5,  # foret
+                                   'S': 1,  # plage
+                                   'M': 1.5,  # montagne
+                                   'C': 1,  # colline
+                                   'P': 1,  # plaine
+                                   'F': 1,  # fort
+                                   'T': 1,  # recherche
+                                   'U': 1,  # Usine M
+                                   'u': 1,  # Usine C
+                                   ' ': -1  # void
+                               }),
+    "genie": ClasseUnite("génie", care_vert, care_vert, range(1, 1),
+                         {
+                             "movepoint": 4,
+                             "cost": 800,
+                             "manpower": 10000,
+                             "supplies": 1,
+                             "defaultorga": 50,
+                             "defensiveness": 10,
+                             "toughness": 10,
+                             "softness": 90,
+                             "airdefence": 20,
+                             "softattack": 80,
+                             "hardattack": 10,
+                             "airattack": 10,
+                             "hp": 15
+                         },
+                         {
+                             'B': 1,  # base
+                             'E': 1.5,  # eau
+                             'R': 0.5,  # route
+                             'V': 1,  # ville
+                             'f': 1.5,  # foret
+                             'S': 1,  # plage
+                             'M': 3,  # montagne
+                             'C': 2,  # colline
+                             'P': 1,  # plaine
+                             'F': 1,  # fort
+                             'T': 1,  # recherche
+                             'U': 1,  # Usine M
+                             'u': 1,  # Usine C
+                             ' ': -1  # void
+                         }),
+    "hopitale": ClasseUnite("unité médicale", care_vert, care_vert, range(1, 2),
                             {
                                 "movepoint": 4,
                                 "cost": 650,
@@ -221,23 +221,23 @@ units = {
                                 'u': 1,  # Usine C
                                 ' ': -1  # void
                             }),
-    "SOP": ClasseUnite("SOP", care_vert, range(1, 2),
-                            {
-                                "movepoint": 5,
-                                "cost": 1200,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 20
-                            },
-                            {
+    "SOP": ClasseUnite("SOP", care_vert, care_vert, range(1, 2),
+                       {
+                           "movepoint": 5,
+                           "cost": 1200,
+                           "manpower": 10000,
+                           "supplies": 1,
+                           "defaultorga": 50,
+                           "defensiveness": 10,
+                           "toughness": 10,
+                           "softness": 90,
+                           "airdefence": 20,
+                           "softattack": 80,
+                           "hardattack": 10,
+                           "airattack": 10,
+                           "hp": 20
+                       },
+                       {
                            'B': 1,  # base
                            'E': 1,  # eau
                            'R': 0.5,  # route
@@ -252,56 +252,56 @@ units = {
                            'U': 1,  # Usine M
                            'u': 1,  # Usine C
                            ' ': -1  # void
-                            }),
-    "reco": ClasseUnite("reconnaissance", care_vert, range(0, 3),
-                            {
-                                "movepoint": 6,
-                                "cost": 1000,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 15
-                            },
-                            {
-                                'B': 1,  # base
-                                'E': -1,  # eau
-                                'R': 0.5,  # route
-                                'V': 1,  # ville
-                                'f': 1.5,  # foret
-                                'S': 1,  # plage
-                                'M': -1,  # montagne
-                                'C': 1.5,  # colline
-                                'P': 1,  # plaine
-                                'F': 1,  # fort
-                                'T': 1,  # recherche
-                                'U': 1,  # Usine M
-                                'u': 1,  # Usine C
-                                ' ': 1  # void
-                            }),
-    "infMeca": ClasseUnite("infanterie mecaniser", care_vert, range(1, 1),
-                            {
-                                "movepoint": 6,
-                                "cost": 1500,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 25
-                            },
-                            {
+                       }),
+    "reco": ClasseUnite("reconnaissance", care_vert, care_vert, range(0, 3),
+                        {
+                            "movepoint": 6,
+                            "cost": 1000,
+                            "manpower": 10000,
+                            "supplies": 1,
+                            "defaultorga": 50,
+                            "defensiveness": 10,
+                            "toughness": 10,
+                            "softness": 90,
+                            "airdefence": 20,
+                            "softattack": 80,
+                            "hardattack": 10,
+                            "airattack": 10,
+                            "hp": 15
+                        },
+                        {
+                            'B': 1,  # base
+                            'E': -1,  # eau
+                            'R': 0.5,  # route
+                            'V': 1,  # ville
+                            'f': 1.5,  # foret
+                            'S': 1,  # plage
+                            'M': -1,  # montagne
+                            'C': 1.5,  # colline
+                            'P': 1,  # plaine
+                            'F': 1,  # fort
+                            'T': 1,  # recherche
+                            'U': 1,  # Usine M
+                            'u': 1,  # Usine C
+                            ' ': 1  # void
+                        }),
+    "infMeca": ClasseUnite("infanterie mecaniser", care_vert, care_vert, range(1, 1),
+                           {
+                               "movepoint": 6,
+                               "cost": 1500,
+                               "manpower": 10000,
+                               "supplies": 1,
+                               "defaultorga": 50,
+                               "defensiveness": 10,
+                               "toughness": 10,
+                               "softness": 90,
+                               "airdefence": 20,
+                               "softattack": 80,
+                               "hardattack": 10,
+                               "airattack": 10,
+                               "hp": 25
+                           },
+                           {
                                'B': 1,  # base
                                'E': -1,  # eau
                                'R': 0.5,  # route
@@ -317,7 +317,7 @@ units = {
                                'u': 1,  # Usine C
                                ' ': 1  # void
                            }),
-    "transport": ClasseUnite("transport", care_vert, range(1, 2),
+    "transport": ClasseUnite("transport", care_vert, care_vert, range(1, 2),
                              {
                                  "movepoint": 6,
                                  "cost": 650,
@@ -334,39 +334,39 @@ units = {
                                  "hp": 25
                              },
                              {
-                                'B': 1,  # base
-                                'E': -1,  # eau
-                                'R': 0.5,  # route
-                                'V': 1,  # ville
-                                'f': 2,  # foret
-                                'S': 1,  # plage
-                                'M': -1,  # montagne
-                                'C': 2,  # colline
-                                'P': 1,  # plaine
-                                'F': 1,  # fort
-                                'T': 1,  # recherche
-                                'U': 1,  # Usine M
-                                'u': 1,  # Usine C
-                                ' ': 1  # void
-                            }),
+                                 'B': 1,  # base
+                                 'E': -1,  # eau
+                                 'R': 0.5,  # route
+                                 'V': 1,  # ville
+                                 'f': 2,  # foret
+                                 'S': 1,  # plage
+                                 'M': -1,  # montagne
+                                 'C': 2,  # colline
+                                 'P': 1,  # plaine
+                                 'F': 1,  # fort
+                                 'T': 1,  # recherche
+                                 'U': 1,  # Usine M
+                                 'u': 1,  # Usine C
+                                 ' ': 1  # void
+                             }),
 
-    "mortier": ClasseUnite("mortier", care_vert, range(1, 2),
-                            {
-                                "movepoint": 4,
-                                "cost": 500,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 8
-                            },
-                            {
+    "mortier": ClasseUnite("mortier", care_vert, care_vert, range(1, 2),
+                           {
+                               "movepoint": 4,
+                               "cost": 500,
+                               "manpower": 10000,
+                               "supplies": 1,
+                               "defaultorga": 50,
+                               "defensiveness": 10,
+                               "toughness": 10,
+                               "softness": 90,
+                               "airdefence": 20,
+                               "softattack": 80,
+                               "hardattack": 10,
+                               "airattack": 10,
+                               "hp": 8
+                           },
+                           {
                                'B': 1,  # base
                                'E': -1,  # eau
                                'R': 0.5,  # route
@@ -382,55 +382,55 @@ units = {
                                'u': 1,  # Usine C
                                ' ': -1  # void
                            }),
-    "artillerie": ClasseUnite("artillerie", care_vert, range(2, 4),
-                            {
-                                "movepoint": 3,
-                                "cost": 1000,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 12
-                            },
-                            {
-                                'B': 1,  # base
-                                'E': -1,  # eau
-                                'R': 0.5,  # route
-                                'V': 1,  # ville
-                                'f': 2,  # foret
-                                'S': 1,  # plage
-                                'M': -1,  # montagne
-                                'C': 3,  # colline
-                                'P': 1,  # plaine
-                                'F': 1,  # fort
-                                'T': 1,  # recherche
-                                'U': 1,  # Usine M
-                                'u': 1,  # Usine C
-                                ' ': -1  # void
-                            }),
-    "AA": ClasseUnite("AA", care_vert, range(1, 1),
-                            {
-                                "movepoint": 6,
-                                "cost": 1200,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 20
-                            },
-                            {
+    "artillerie": ClasseUnite("artillerie", care_vert, care_vert, range(2, 4),
+                              {
+                                  "movepoint": 3,
+                                  "cost": 1000,
+                                  "manpower": 10000,
+                                  "supplies": 1,
+                                  "defaultorga": 50,
+                                  "defensiveness": 10,
+                                  "toughness": 10,
+                                  "softness": 90,
+                                  "airdefence": 20,
+                                  "softattack": 80,
+                                  "hardattack": 10,
+                                  "airattack": 10,
+                                  "hp": 12
+                              },
+                              {
+                                  'B': 1,  # base
+                                  'E': -1,  # eau
+                                  'R': 0.5,  # route
+                                  'V': 1,  # ville
+                                  'f': 2,  # foret
+                                  'S': 1,  # plage
+                                  'M': -1,  # montagne
+                                  'C': 3,  # colline
+                                  'P': 1,  # plaine
+                                  'F': 1,  # fort
+                                  'T': 1,  # recherche
+                                  'U': 1,  # Usine M
+                                  'u': 1,  # Usine C
+                                  ' ': -1  # void
+                              }),
+    "AA": ClasseUnite("AA", care_vert, care_vert, range(1, 1),
+                      {
+                          "movepoint": 6,
+                          "cost": 1200,
+                          "manpower": 10000,
+                          "supplies": 1,
+                          "defaultorga": 50,
+                          "defensiveness": 10,
+                          "toughness": 10,
+                          "softness": 90,
+                          "airdefence": 20,
+                          "softattack": 80,
+                          "hardattack": 10,
+                          "airattack": 10,
+                          "hp": 20
+                      },
+                      {
                           'B': 1,  # base
                           'E': -1,  # eau
                           'R': 0.5,  # route
@@ -446,23 +446,23 @@ units = {
                           'u': 1,  # Usine C
                           ' ': 1  # void
                       }),
-    "MAA": ClasseUnite("missille AA", care_vert, range(2, 4),
-                            {
-                                "movepoint": 3,
-                                "cost": 2000,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 20
-                            },
-                            {
+    "MAA": ClasseUnite("missille AA", care_vert, care_vert, range(2, 4),
+                       {
+                           "movepoint": 3,
+                           "cost": 2000,
+                           "manpower": 10000,
+                           "supplies": 1,
+                           "defaultorga": 50,
+                           "defensiveness": 10,
+                           "toughness": 10,
+                           "softness": 90,
+                           "airdefence": 20,
+                           "softattack": 80,
+                           "hardattack": 10,
+                           "airattack": 10,
+                           "hp": 20
+                       },
+                       {
                            'B': 1,  # base
                            'E': -1,  # eau
                            'R': 0.5,  # route
@@ -478,7 +478,7 @@ units = {
                            'u': 1,  # Usine C
                            ' ': -1  # void
                        }),
-    "tank": ClasseUnite("tank", care_bleu, range(1, 2),
+    "tank": ClasseUnite("tank", care_bleu, care_bleu, range(1, 2),
                         {  # tintin's stat
                             "movepoint": 5,  # point de mouvement
                             "cost": 2500,  # argent requis lors du recrutement
@@ -510,7 +510,7 @@ units = {
                             'u': 1,  # Usine C
                             ' ': 1  # void
                         }),
-    "antiTank": ClasseUnite("anti-tank", care_vert, range(1, 2),
+    "antiTank": ClasseUnite("anti-tank", care_vert, care_vert, range(1, 2),
                             {
                                 "movepoint": 3,
                                 "cost": 1000,
@@ -542,23 +542,23 @@ units = {
                                 'u': 1,  # Usine C
                                 ' ': -1  # void
                             }),
-    "tankD": ClasseUnite("chasseur de char", care_vert, range(1, 1),
-                            {
-                                "movepoint": 5,
-                                "cost": 2000,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 40
-                            },
-                            {
+    "tankD": ClasseUnite("chasseur de char", care_vert, care_vert, range(1, 1),
+                         {
+                             "movepoint": 5,
+                             "cost": 2000,
+                             "manpower": 10000,
+                             "supplies": 1,
+                             "defaultorga": 50,
+                             "defensiveness": 10,
+                             "toughness": 10,
+                             "softness": 90,
+                             "airdefence": 20,
+                             "softattack": 80,
+                             "hardattack": 10,
+                             "airattack": 10,
+                             "hp": 40
+                         },
+                         {
                              'B': 1,  # base
                              'E': -1,  # eau
                              'R': 0.5,  # route
@@ -574,7 +574,7 @@ units = {
                              'u': 1,  # Usine C
                              ' ': 1  # void
                          }),
-    "chasseur": ClasseUnite("chasseur", care_vert, range(1, 1),
+    "chasseur": ClasseUnite("chasseur", care_vert, care_vert, range(1, 1),
                             {
                                 "movepoint": 10,
                                 "cost": 2200,
@@ -606,38 +606,38 @@ units = {
                                 'u': 1,  # Usine C
                                 ' ': -1  # void
                             }),
-    "bombardier": ClasseUnite("bombardier", care_vert, range(1, 1),
-                            {
-                                "movepoint": 8,
-                                "cost": 4000,
-                                "manpower": 10000,
-                                "supplies": 1,
-                                "defaultorga": 50,
-                                "defensiveness": 10,
-                                "toughness": 10,
-                                "softness": 90,
-                                "airdefence": 20,
-                                "softattack": 80,
-                                "hardattack": 10,
-                                "airattack": 10,
-                                "hp": 30
-                            },
-                            {
-                                'B': 1,  # base
-                                'E': 1,  # eau
-                                'R': 1,  # route
-                                'V': 1,  # ville
-                                'f': 1,  # foret
-                                'S': 1,  # plage
-                                'M': 1,  # montagne
-                                'C': 1,  # colline
-                                'P': 1,  # plaine
-                                'F': 1,  # fort
-                                'T': 1,  # recherche
-                                'U': 1,  # Usine M
-                                'u': 1,  # Usine C
-                                ' ': -1  # void
-                            }),
+    "bombardier": ClasseUnite("bombardier", care_vert, care_vert, range(1, 1),
+                              {
+                                  "movepoint": 8,
+                                  "cost": 4000,
+                                  "manpower": 10000,
+                                  "supplies": 1,
+                                  "defaultorga": 50,
+                                  "defensiveness": 10,
+                                  "toughness": 10,
+                                  "softness": 90,
+                                  "airdefence": 20,
+                                  "softattack": 80,
+                                  "hardattack": 10,
+                                  "airattack": 10,
+                                  "hp": 30
+                              },
+                              {
+                                  'B': 1,  # base
+                                  'E': 1,  # eau
+                                  'R': 1,  # route
+                                  'V': 1,  # ville
+                                  'f': 1,  # foret
+                                  'S': 1,  # plage
+                                  'M': 1,  # montagne
+                                  'C': 1,  # colline
+                                  'P': 1,  # plaine
+                                  'F': 1,  # fort
+                                  'T': 1,  # recherche
+                                  'U': 1,  # Usine M
+                                  'u': 1,  # Usine C
+                                  ' ': -1  # void
+                              }),
 
 }
 
@@ -863,14 +863,13 @@ def afficher_unite():
             select_rect = Rect(unite.X * taille_case, unite.Y * taille_case, taille_case, taille_case)
             rect(screen, [255, 100, 0], select_rect)
 
-        icon_unite = scale(unite.classeunite.sprite, (taille_case // 2, taille_case // 2))
-        filtre_equipe = Surface((icon_unite.get_width(), icon_unite.get_height()))
-        filtre_equipe.set_alpha(100)
+        sprite_unite = Surface((0, 0))
         if unite.equipe == 1:
-            filtre_equipe.fill(BLUE)
+            sprite_unite = unite.classeunite.sprite2
         else:
-            filtre_equipe.fill(RED)
-        icon_unite.blit(filtre_equipe, (0, 0))
+            sprite_unite = unite.classeunite.sprite1
+
+        icon_unite = scale(sprite_unite, (taille_case // 2, taille_case // 2))
         screen.blit(icon_unite, (int((unite.X + 1 / 4) * taille_case), int((unite.Y + 1 / 4) * taille_case)))
 
         # Affichage des HP
@@ -969,7 +968,12 @@ while not done:
 
     for unite in range(0, len(units_id)):
         unite_src = units[units_id[unite]]
-        image_unite = scale(unite_src.sprite, (taille_case - 4, taille_case - 4))
+        sprite_unite = Surface((0, 0))
+        if tour_equipe == 1:
+            sprite_unite = unite_src.sprite2
+        else:
+            sprite_unite = unite_src.sprite1
+        image_unite = scale(sprite_unite, (taille_case - 4, taille_case - 4))
         frame_unite = Surface((taille_case, taille_case))
         if unite == selected_unit_create:
             frame_unite.fill((255, 255, 0))

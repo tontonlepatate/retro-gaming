@@ -5,11 +5,12 @@ from random import random
 import numpy as np
 import pygame
 # recherche du répertoire de travail
-from pygame import draw, transform, surfarray
+from pygame import draw, transform, surfarray, Surface
+from pygame.draw import rect
 from pygame.rect import Rect
 from pygame.transform import scale
 
-from common import WHITE, palette
+from common import WHITE, palette, YELLOW, BLACK, RED
 
 pixel_size = 40
 terrain_dim = [20, 15]
@@ -22,8 +23,10 @@ void.fill(WHITE)
 # Initialize pygame
 pygame.init()
 
+police = pygame.font.SysFont("arial", 15, True)
+
 # Set the HEIGHT and WIDTH of the screen
-WINDOW_SIZE = [pixel_size * (terrain_dim[0] + 1), pixel_size * terrain_dim[1]]
+WINDOW_SIZE = [pixel_size * (terrain_dim[0] + 1), pixel_size * (terrain_dim[1] + 1)]
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 # Set title of screen
@@ -49,40 +52,47 @@ select = 'P'
 while not done:
 
     time = int(pygame.time.get_ticks() / 100)
+    pos = pygame.mouse.get_pos()
+    x = pos[0] // pixel_size
+    y = pos[1] // pixel_size
 
     for event in pygame.event.get():  # User did something
         if event.type == pygame.QUIT:  # If user clicked close
             done = True  # Flag that we are done so we exit this loo
 
-    if pygame.mouse.get_pressed()[0]:
-        pos = pygame.mouse.get_pos()
-        x = pos[0]
-        y = pos[1]
-        print("x:" + str(x) + " y:" + str(y))
-        if x // pixel_size < terrain_dim[0]:
-            array = bytearray(matrice[y // pixel_size], 'UTF-8')
-            array[x // pixel_size] = int.from_bytes(select.encode('UTF-8'), "big")
-            matrice[y // pixel_size] = str(array.decode('UTF-8'))
-        else:
-            try:
-                select = palid[y // pixel_size]
-                if select == "EXPORT":
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if y >= terrain_dim[1]:
+                btn_generer = Rect((terrain_dim[0] - 1), terrain_dim[1], 2, 1)
+                btn_aleatoire = Rect((terrain_dim[0] - 3), terrain_dim[1], 2, 1)
+                if btn_generer.collidepoint(x, y):
                     select = ' '
                     print("Map :")
                     for ligne in matrice:
                         print("\"{}\",".format(ligne))
-                        clicked = False
-                elif select == "RANDOM":
+
+                elif btn_aleatoire.collidepoint(x, y):
                     select = ' '
                     matrice = []
+                    base_count = 0
                     for line in range(terrain_dim[1]):
                         chaine = ""
                         for col in range(terrain_dim[0]):
-                            chaine = chaine + palid[int(random() * 6)]
+                            letter = palid[int(random() * 6)]
+                            while letter == 'B':
+                                letter = palid[int(random() * 6)]
+                            chaine = chaine + letter
+
                         matrice.append(chaine)
-                    clicked = False
-            except:
-                ""
+
+            elif x >= terrain_dim[0]:
+                select = palid[y]
+
+    if pygame.mouse.get_pressed()[0]:
+
+        if x < terrain_dim[0] and y < terrain_dim[1]:
+            array = bytearray(matrice[y], 'UTF-8')
+            array[x] = int.from_bytes(select.encode('UTF-8'), "big")
+            matrice[y] = str(array.decode('UTF-8'))
 
     # draw background
     screen.fill(WHITE)
@@ -113,6 +123,22 @@ while not done:
         screen.blit(scale(palette['P'], (pixel_size, pixel_size)), (xpix, ypix))
         screen.blit(scale(couleur, (pixel_size, pixel_size)), (xpix, ypix))
         i = i + 1
+
+    # Affichage bouton TOUR SUIVANT
+    btn_toursuiv = Surface((pixel_size * 2, pixel_size))
+    btn_toursuiv.fill(YELLOW)
+    text = police.render("Génerer", True, BLACK)
+    text = transform.scale(text, (pixel_size * 2, pixel_size))
+    btn_toursuiv.blit(text, (0, 0))
+    screen.blit(btn_toursuiv, ((terrain_dim[0] - 1) * pixel_size, terrain_dim[1] * pixel_size))
+
+    # Affichage bouton TOUR SUIVANT
+    btn_toursuiv = Surface((pixel_size * 2, pixel_size))
+    btn_toursuiv.fill(RED)
+    text = police.render("Aleatoire", True, BLACK)
+    text = transform.scale(text, (pixel_size * 2, pixel_size))
+    btn_toursuiv.blit(text, (0, 0))
+    screen.blit(btn_toursuiv, ((terrain_dim[0] - 3) * pixel_size, terrain_dim[1] * pixel_size))
 
     clock.tick(20)
     # Go ahead and update the screen with what we've drawn.

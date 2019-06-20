@@ -323,7 +323,7 @@ def click_handler():
         type_u = units[units_id[selected_unit_create]]
         cout = type_u.stat["cost"]
 
-        if cout < argent_player[tour_equipe]:
+        if cout <= argent_player[tour_equipe]:
             argent_player[tour_equipe] -= cout
             terrain_units.append(
                 Unite(int(x_cursor), int(y_cursor), tour_equipe, units[units_id[selected_unit_create]]))

@@ -1,3 +1,4 @@
+import inspect
 import os
 
 import numpy as np
@@ -13,6 +14,10 @@ from pygame.transform import scale
 from classunite import ClasseUnite
 from common import palette, BLUE, RED, WHITE, YELLOW, BLACK, scriptDIR, unite_assets
 from unite import Unite
+
+scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
+scriptDIR = os.path.dirname(scriptPATH)
+assets = os.path.join(scriptDIR, "data/unites")
 
 pygame.init()
 
@@ -85,8 +90,8 @@ clock = pygame.time.Clock()
 units = {
 
     "infanterie": ClasseUnite("infanterie",
-                              pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
-                              pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                              pygame.image.load(os.path.join(unite_assets, "SNGPUCI-----.png")),
+                              pygame.image.load(os.path.join(unite_assets, "SHGPUCI-----.png")),
                               range(1, 1),
                               {
                                   "movepoint": 4,

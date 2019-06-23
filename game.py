@@ -923,18 +923,27 @@ while not done:
     text = transform.scale(text, (taille_case * 4, taille_case))
     screen.blit(text, ((terrain_dim[0] - 4) // 2 * taille_case, 0))
 
-    # AFFICHAGE DES INFOS JOUEUR
-    items = ["argent : ", "revenu : ",
-             "argent : ", "revenu : "]
-    variables = [argent_player[1], revenu[1], argent_player[0], revenu[0]]
-    colors = [RED, RED, BLUE, BLUE]
-    coordonnees = [(0, 10), (0, 30), (taille_case * terrain_dim[0] - 200, 10),
-                   (taille_case * terrain_dim[0] - 200, 30), (taille_case * terrain_dim[0] - 200, 50),
-                   (taille_case * terrain_dim[0] - 200, 70)]
+    # AFFICHAGE DES INFORMATIONS UTILISATEURS
+    messages = [
+        {
+            "texte": "argent : ",
+            "contenu": argent_player
+        },
+        {
+            "texte": "revenu : ",
+            "contenu": revenu
+        }
+    ]
 
-    for i, v, c, co in zip(items, variables, colors, coordonnees):
-        text = police.render(i + str(v), True, c)
-        screen.blit(text, co)
+    message_counter = 0
+    for message in messages:
+        y = message_counter * 20
+        redtxt = police.render(message["texte"] + str(message["contenu"][1]), True, RED)
+        bluetxt = police.render(message["texte"] + str(message["contenu"][0]), True, BLUE)
+        screen.blit(redtxt, (0, y))
+        screen.blit(bluetxt, (screen.get_width() - redtxt.get_width(), y))
+
+        message_counter += 1
 
     # Affichage de la barre d'achat
     for unite in range(0, len(units_id)):

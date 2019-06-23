@@ -610,7 +610,6 @@ units = {
                                   ' ': -1  # void
                               }),
 }
-
 units_id = []
 
 terrain_units = [
@@ -624,35 +623,24 @@ lastclick = False
 
 tour_equipe = 0
 
-def terrain_var(case):
-     if case =='B':
-         return 3
-     if case =='E':
-         return 0.25
-     if case =='R':
-        return 0.75
-     if case =='V':
-         return 2
-     if case =='f':
-         return 1.5
-     if case =='S':
-         return 0.5
-     if case =='M':
-         return 3
-     if case =='C':
-         return 2
-     if case =='P':
-         return 1
-     if case =='F':
-         return 3
-     if case =='T':
-         return 2
-     if case =='U':
-         return 2
-     if case =='u':
-         return 2
-     if case ==' ':
-         return 1
+terrain_bonus = {
+    'B': 3,
+    'E': 0.25,
+    'R': 0.75,
+    'V': 2,
+    'f': 1.5,
+    'S': 0.5,
+    'M': 3,
+    'C': 2,
+    'P': 1,
+    'F': 3,
+    'T': 2,
+    'U': 2,
+    'u': 2,
+    ' ': 1,
+}
+
+
 def equipe_differente(unite1: int, unite2: int) -> bool:
     return terrain_units[unite1].equipe != terrain_units[unite2].equipe
 
@@ -668,7 +656,11 @@ def attaque(id_unite: int, id_cible: int):
     print(terrain_c)
 
     # Début de attaque
-    cible.hp -= int(((unite.classeunite.stat["softattack"]/cible.classeunite.stat["softness"])+(unite.classeunite.stat["hardattack"]/cible.classeunite.stat["toughness"])+(unite.classeunite.stat["airattack"]/cible.classeunite.stat["airdefence"]))*(unite.classeunite.stat["hp"]/cible.classeunite.stat["defensiveness"]*(1/terrain_var(terrain_c))))
+    cible.hp -= int(((unite.classeunite.stat["softattack"] / cible.classeunite.stat["softness"]) + (
+            unite.classeunite.stat["hardattack"] / cible.classeunite.stat["toughness"]) + (
+                             unite.classeunite.stat["airattack"] / cible.classeunite.stat["airdefence"])) * (
+                            unite.classeunite.stat["hp"] / cible.classeunite.stat["defensiveness"] * (
+                            1 / terrain_bonus[terrain_c])))
     # print(cible.hp)
     # print(terrain_var(terrain_c))
     if cible.hp <= 0:

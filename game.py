@@ -936,7 +936,7 @@ while not done:
         text = police.render(i + str(v), True, c)
         screen.blit(text, co)
 
-    # Affichage de la bar d'achat
+    # Affichage de la barre d'achat
     for unite in range(0, len(units_id)):
         unite_src = units[units_id[unite]]
         sprite_unite: Surface = unite_src.sprite1

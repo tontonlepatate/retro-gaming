@@ -12,7 +12,7 @@ from pygame.surface import Surface
 from pygame.transform import scale
 
 from classunite import ClasseUnite
-from common import palette, BLUE, RED, WHITE, YELLOW, BLACK, scriptDIR, unite_assets
+from common import palette, RED, WHITE, YELLOW, BLACK, unite_assets, GREEN
 from unite import Unite
 
 scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
@@ -848,7 +848,7 @@ def afficher_terrain():
             image = transform.scale(palette[biome], (taille_case, taille_case))
             screen.blit(image, [xpix, ypix])
 
-    trans_case(BLUE, (bases[0]["X"], bases[0]["Y"]))
+    trans_case(GREEN, (bases[0]["X"], bases[0]["Y"]))
     afficher_hp(bases[0]["hp"], bases[0]["X"], bases[0]["Y"])
     trans_case(RED, (bases[1]["X"], bases[1]["Y"]))
     afficher_hp(bases[1]["hp"], bases[1]["X"], bases[1]["Y"])
@@ -944,7 +944,7 @@ while not done:
     screen.blit(btn_toursuiv, ((terrain_dim[0] - 2) * taille_case, terrain_dim[1] * taille_case))
 
     # AFFICHAGE DU TOUR
-    color = BLUE
+    color = GREEN
     if tour_equipe == 1:
         color = RED
     text = police.render("TOUR DE L'EQUIPE " + str(tour_equipe + 1), True, color)
@@ -967,7 +967,7 @@ while not done:
     for message in messages:
         y = message_counter * 20
         redtxt = police.render(message["texte"] + str(message["contenu"][1]), True, RED)
-        bluetxt = police.render(message["texte"] + str(message["contenu"][0]), True, BLUE)
+        bluetxt = police.render(message["texte"] + str(message["contenu"][0]), True, GREEN)
         screen.blit(redtxt, (0, y))
         screen.blit(bluetxt, (screen.get_width() - redtxt.get_width(), y))
 

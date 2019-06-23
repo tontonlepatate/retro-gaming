@@ -936,6 +936,7 @@ while not done:
         text = police.render(i + str(v), True, c)
         screen.blit(text, co)
 
+    # Affichage de la bar d'achat
     for unite in range(0, len(units_id)):
         unite_src = units[units_id[unite]]
         sprite_unite: Surface = unite_src.sprite1
@@ -947,7 +948,7 @@ while not done:
         if unite == selected_unit_create:
             frame_unite.fill((255, 255, 0))
         else:
-            frame_unite.fill((0, 0, 0))
+            frame_unite.fill(WHITE)
         frame_unite.blit(image_unite, (2, 2))
         screen.blit(frame_unite, (taille_case * unite, taille_case * terrain_dim[1]))
 

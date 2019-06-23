@@ -90,8 +90,8 @@ clock = pygame.time.Clock()
 units = {
 
     "infanterie": ClasseUnite("infanterie",
-                              pygame.image.load(os.path.join(unite_assets, "SNGPUCI-----.png")),
-                              pygame.image.load(os.path.join(unite_assets, "SHGPUCI-----.png")),
+                              pygame.image.load(os.path.join(unite_assets, "0_inf.png")),
+                              pygame.image.load(os.path.join(unite_assets, "1_inf.png")),
                               range(1, 1),
                               {
                                   "movepoint": 4,

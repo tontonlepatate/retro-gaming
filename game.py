@@ -82,7 +82,7 @@ WINDOW_SIZE = [taille_case * terrain_dim[0], taille_case * terrain_dim[1] + 1]
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 argent_player = [2000, 2000]
-revenu = [1000, 1000]
+revenu = [600, 600]
 
 clock = pygame.time.Clock()
 

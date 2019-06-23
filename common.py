@@ -344,7 +344,7 @@ units = {
                           "airdefence": 80,
                           "softattack": 95,
                           "hardattack": 5,
-                          "airattack": 60,
+                          "airattack": 350,
                           "hp": 100
                       },
                       {
@@ -379,7 +379,7 @@ units = {
                            "airdefence": 95,
                            "softattack": 10,
                            "hardattack": 10,
-                           "airattack": 95,
+                           "airattack": 500,
                            "hp": 100
                        },
                        {
@@ -554,7 +554,7 @@ units = {
                                   "airdefence": 20,
                                   "softattack": 60,
                                   "hardattack": 80,
-                                  "airattack": 100,
+                                  "airattack": 200,
                                   "hp": 100
                               },
                               {

@@ -195,8 +195,8 @@ units = {
                              ' ': -1  # void
                          }),
     "SOP": ClasseUnite("SOP",
-                       pygame.image.load(os.path.join(unite_assets, "0_Special_Operations_Forces.png")),
-                       pygame.image.load(os.path.join(unite_assets, "1_Special_Operations_Force.png")),
+                       pygame.image.load(os.path.join(unite_assets, "0_SOP.png")),
+                       pygame.image.load(os.path.join(unite_assets, "1_SOP.png")),
                        range(1, 2),
                        {
                            "movepoint": 5,

@@ -17,8 +17,8 @@ unite_assets = os.path.join(assets, "unites")
 
 BLACK = [0, 0, 0]
 WHITE = [255, 255, 255]
-GREEN = [0, 255, 0]
-RED = [255, 0, 0]
+GREEN = [170, 255, 170]
+RED = [255, 50, 50]
 BLUE = [0, 0, 255]
 YELLOW = [241, 244, 66]
 

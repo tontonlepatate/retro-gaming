@@ -13,6 +13,7 @@ def charger_sprite(feuille, x, y, size):
 scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
 scriptDIR = os.path.dirname(scriptPATH)
 assets = os.path.join(scriptDIR, "data")
+unite_assets = os.path.join(assets, "unites")
 
 BLACK = [0, 0, 0]
 WHITE = [255, 255, 255]

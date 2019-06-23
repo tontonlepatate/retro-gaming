@@ -1,4 +1,3 @@
-import inspect
 import os
 
 import numpy as np
@@ -12,12 +11,8 @@ from pygame.surface import Surface
 from pygame.transform import scale
 
 from classunite import ClasseUnite
-from common import palette, BLUE, RED, WHITE, YELLOW, BLACK, scriptDIR
+from common import palette, BLUE, RED, WHITE, YELLOW, BLACK, scriptDIR, unite_assets
 from unite import Unite
-
-scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
-scriptDIR = os.path.dirname(scriptPATH)
-assets = os.path.join(scriptDIR, "data/unites")
 
 pygame.init()
 
@@ -87,17 +82,12 @@ revenu = [1000, 1000]
 
 clock = pygame.time.Clock()
 
-care_vert = pygame.Surface((1, 1))
-care_vert.fill((0, 255, 0))
-
-care_bleu = pygame.Surface((1, 1))
-care_bleu.fill((0, 0, 255))
-terrainStat = {
-
-}
 units = {
 
-    "infanterie": ClasseUnite("infanterie", pygame.image.load(os.path.join(assets,"0_Infantry.png")), pygame.image.load(os.path.join(assets,"0_Infantry.png")), range(1, 1),
+    "infanterie": ClasseUnite("infanterie",
+                              pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                              pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                              range(1, 1),
                               {
                                   "movepoint": 4,
                                   "cost": 500,
@@ -111,7 +101,7 @@ units = {
                                   "softattack": 80,
                                   "hardattack": 10,
                                   "airattack": 10,
-                                  "hp":  100
+                                  "hp": 100
                               },
                               {
                                   'B': 1,  # base
@@ -129,7 +119,10 @@ units = {
                                   'u': 1,  # Usine C
                                   ' ': -1  # void
                               }),
-    "infMontagne": ClasseUnite("infanterie de montagne", pygame.image.load(os.path.join(assets,"1_Mountain_Infantry.png")), pygame.image.load(os.path.join(assets,"1_Mountain_Infantry.png")), range(1, 1),
+    "infMontagne": ClasseUnite("infanterie de montagne",
+                               pygame.image.load(os.path.join(unite_assets, "1_Mountain_Infantry.png")),
+                               pygame.image.load(os.path.join(unite_assets, "1_Mountain_Infantry.png")),
+                               range(1, 1),
                                {
                                    "movepoint": 4,
                                    "cost": 650,
@@ -161,7 +154,10 @@ units = {
                                    'u': 1,  # Usine C
                                    ' ': -1  # void
                                }),
-    "genie": ClasseUnite("génie", pygame.image.load(os.path.join(assets,"0_Engineers.png")), pygame.image.load(os.path.join(assets,"0_Engineers.png")), range(1, 1),
+    "genie": ClasseUnite("génie",
+                         pygame.image.load(os.path.join(unite_assets, "0_Engineers.png")),
+                         pygame.image.load(os.path.join(unite_assets, "0_Engineers.png")),
+                         range(1, 1),
                          {
                              "movepoint": 4,
                              "cost": 800,
@@ -193,7 +189,10 @@ units = {
                              'u': 1,  # Usine C
                              ' ': -1  # void
                          }),
-    "SOP": ClasseUnite("SOP", pygame.image.load(os.path.join(assets,"0_Special_Operations_Forces.png")), pygame.image.load(os.path.join(assets,"0_Special_Operations_Forces.png")), range(1, 2),
+    "SOP": ClasseUnite("SOP",
+                       pygame.image.load(os.path.join(unite_assets, "0_Special_Operations_Forces.png")),
+                       pygame.image.load(os.path.join(unite_assets, "0_Special_Operations_Forces.png")),
+                       range(1, 2),
                        {
                            "movepoint": 5,
                            "cost": 1200,
@@ -225,7 +224,10 @@ units = {
                            'u': 1,  # Usine C
                            ' ': -1  # void
                        }),
-    "reco": ClasseUnite("reconnaissance", pygame.image.load(os.path.join(assets,"0_Reconnaissance.png")), pygame.image.load(os.path.join(assets,"0_Reconnaissance.png")), range(1, 1),
+    "reco": ClasseUnite("reconnaissance",
+                        pygame.image.load(os.path.join(unite_assets, "0_Reconnaissance.png")),
+                        pygame.image.load(os.path.join(unite_assets, "0_Reconnaissance.png")),
+                        range(1, 1),
                         {
                             "movepoint": 6,
                             "cost": 1000,
@@ -257,7 +259,10 @@ units = {
                             'u': 1,  # Usine C
                             ' ': 1  # void
                         }),
-    "infMeca": ClasseUnite("infanterie mecaniser", pygame.image.load(os.path.join(assets,"1_Mechanized_Infantry.png")), pygame.image.load(os.path.join(assets,"1_Mechanized_Infantry.png")), range(1, 1),
+    "infMeca": ClasseUnite("infanterie mecaniser",
+                           pygame.image.load(os.path.join(unite_assets, "1_Mechanized_Infantry.png")),
+                           pygame.image.load(os.path.join(unite_assets, "1_Mechanized_Infantry.png")),
+                           range(1, 1),
                            {
                                "movepoint": 6,
                                "cost": 1500,
@@ -289,7 +294,10 @@ units = {
                                'u': 1,  # Usine C
                                ' ': 1  # void
                            }),
-    "mortier": ClasseUnite("mortier", pygame.image.load(os.path.join(assets,"0_Mortars.png")), pygame.image.load(os.path.join(assets,"0_Mortars.png")), range(1, 2),
+    "mortier": ClasseUnite("mortier",
+                           pygame.image.load(os.path.join(unite_assets, "0_Mortars.png")),
+                           pygame.image.load(os.path.join(unite_assets, "0_Mortars.png")),
+                           range(1, 2),
                            {
                                "movepoint": 4,
                                "cost": 500,
@@ -321,7 +329,10 @@ units = {
                                'u': 1,  # Usine C
                                ' ': -1  # void
                            }),
-    "artillerie": ClasseUnite("artillerie", pygame.image.load(os.path.join(assets,"0_Artillery.png")), pygame.image.load(os.path.join(assets,"0_Artillery.png")), range(2, 4),
+    "artillerie": ClasseUnite("artillerie",
+                              pygame.image.load(os.path.join(unite_assets, "0_Artillery.png")),
+                              pygame.image.load(os.path.join(unite_assets, "0_Artillery.png")),
+                              range(2, 4),
                               {
                                   "movepoint": 3,
                                   "cost": 1000,
@@ -353,7 +364,10 @@ units = {
                                   'u': 1,  # Usine C
                                   ' ': -1  # void
                               }),
-    "AA": ClasseUnite("AA", pygame.image.load(os.path.join(assets,"0_Infantry.png")), pygame.image.load(os.path.join(assets,"0_Infantry.png")), range(1, 1),
+    "AA": ClasseUnite("AA",
+                      pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                      pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                      range(1, 1),
                       {
                           "movepoint": 6,
                           "cost": 1200,
@@ -385,7 +399,10 @@ units = {
                           'u': 1,  # Usine C
                           ' ': 1  # void
                       }),
-    "MAA": ClasseUnite("missille AA", pygame.image.load(os.path.join(assets,"0_Infantry.png")), pygame.image.load(os.path.join(assets,"0_Infantry.png")), range(2, 4),
+    "MAA": ClasseUnite("missille AA",
+                       pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                       pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                       range(2, 4),
                        {
                            "movepoint": 3,
                            "cost": 2000,
@@ -417,7 +434,10 @@ units = {
                            'u': 1,  # Usine C
                            ' ': -1  # void
                        }),
-    "tank": ClasseUnite("tank", pygame.image.load(os.path.join(assets,"0_Armour.png")), pygame.image.load(os.path.join(assets,"0_Armour.png")), range(1, 2),
+    "tank": ClasseUnite("tank",
+                        pygame.image.load(os.path.join(unite_assets, "0_Armour.png")),
+                        pygame.image.load(os.path.join(unite_assets, "0_Armour.png")),
+                        range(1, 2),
                         {  # tintin's stat
                             "movepoint": 5,  # point de mouvement
                             "cost": 2500,  # argent requis lors du recrutement
@@ -449,7 +469,10 @@ units = {
                             'u': 1,  # Usine C
                             ' ': 1  # void
                         }),
-    "antiTank": ClasseUnite("anti-tank", pygame.image.load(os.path.join(assets,"0_Anti-Tank.png")), pygame.image.load(os.path.join(assets,"0_Anti-Tank.png")), range(1, 2),
+    "antiTank": ClasseUnite("anti-tank",
+                            pygame.image.load(os.path.join(unite_assets, "0_Anti-Tank.png")),
+                            pygame.image.load(os.path.join(unite_assets, "0_Anti-Tank.png")),
+                            range(1, 2),
                             {
                                 "movepoint": 3,
                                 "cost": 1000,
@@ -481,7 +504,10 @@ units = {
                                 'u': 1,  # Usine C
                                 ' ': -1  # void
                             }),
-    "tankD": ClasseUnite("chasseur de char", pygame.image.load(os.path.join(assets,"0_Anti-Tank.png")), pygame.image.load(os.path.join(assets,"0_Anti-Tank.png")), range(1, 1),
+    "tankD": ClasseUnite("chasseur de char",
+                         pygame.image.load(os.path.join(unite_assets, "0_Anti-Tank.png")),
+                         pygame.image.load(os.path.join(unite_assets, "0_Anti-Tank.png")),
+                         range(1, 1),
                          {
                              "movepoint": 5,
                              "cost": 2000,
@@ -513,7 +539,10 @@ units = {
                              'u': 1,  # Usine C
                              ' ': 1  # void
                          }),
-    "chasseur": ClasseUnite("chasseur", pygame.image.load(os.path.join(assets,"0_Infantry.png")), pygame.image.load(os.path.join(assets,"0_Infantry.png")), range(1, 1),
+    "chasseur": ClasseUnite("chasseur",
+                            pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                            pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                            range(1, 1),
                             {
                                 "movepoint": 10,
                                 "cost": 2200,
@@ -545,7 +574,10 @@ units = {
                                 'u': 1,  # Usine C
                                 ' ': -1  # void
                             }),
-    "bombardier": ClasseUnite("bombardier", pygame.image.load(os.path.join(assets,"0_Infantry.png")), pygame.image.load(os.path.join(assets,"0_Infantry.png")), range(1, 1),
+    "bombardier": ClasseUnite("bombardier",
+                              pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                              pygame.image.load(os.path.join(unite_assets, "0_Infantry.png")),
+                              range(1, 1),
                               {
                                   "movepoint": 8,
                                   "cost": 4000,
@@ -624,6 +656,7 @@ def terrain_var(case):
 def equipe_differente(unite1: int, unite2: int) -> bool:
     return terrain_units[unite1].equipe != terrain_units[unite2].equipe
 
+
 def attaque(id_unite: int, id_cible: int):
     print(str(id_unite) + " attaque " + str(id_cible))
 
@@ -641,6 +674,7 @@ def attaque(id_unite: int, id_cible: int):
     if cible.hp <= 0:
         terrain_units.remove(cible)
         return
+
     # Fin de attaque
     terrain_units[id_unite] = unite
     terrain_units[id_cible] = cible
@@ -804,21 +838,17 @@ def click_handler():
 
 
 def afficher_terrain():
+    screen.fill(WHITE)
     laby = np.zeros((terrain_dim[0], terrain_dim[1]), pygame.Surface)
     for y in range(terrain_dim[1]):
         ligne = plan[y]
+        ypix = taille_case * y
         for x in range(terrain_dim[0]):
-            c = ligne[x]
-            laby[x, y] = palette[c]
-
-    for ix in range(terrain_dim[0]):
-        for iy in range(terrain_dim[1]):
-            xpix = taille_case * ix
-            ypix = taille_case * iy
-            p = laby[ix, iy]
+            xpix = taille_case * x
+            biome = ligne[x]
             image = transform.scale(palette['P'], (taille_case, taille_case))
             screen.blit(image, [xpix, ypix])
-            image = transform.scale(p, (taille_case, taille_case))
+            image = transform.scale(palette[biome], (taille_case, taille_case))
             screen.blit(image, [xpix, ypix])
 
     trans_case(BLUE, (bases[0]["X"], bases[0]["Y"]))
@@ -835,13 +865,13 @@ def afficher_unite():
             select_rect = Rect(unite.X * taille_case, unite.Y * taille_case, taille_case, taille_case)
             rect(screen, [255, 100, 0], select_rect)
 
-        sprite_unite = Surface((0, 0))
+        image: Surface
         if unite.equipe == 1:
-            sprite_unite = unite.classeunite.sprite2
+            image = unite.classeunite.sprite2
         else:
-            sprite_unite = unite.classeunite.sprite1
+            image = unite.classeunite.sprite1
 
-        icon_unite = scale(sprite_unite, (taille_case // 2, taille_case // 2))
+        icon_unite: Surface = scale(image, (taille_case // 2, taille_case // 2))
         screen.blit(icon_unite, (int((unite.X + 1 / 4) * taille_case), int((unite.Y + 1 / 4) * taille_case)))
 
         # Affichage des HP
@@ -924,32 +954,41 @@ while not done:
     text = transform.scale(text, (taille_case * 4, taille_case))
     screen.blit(text, ((terrain_dim[0] - 4) // 2 * taille_case, 0))
 
-    # AFFICHAGE DES INFOS JOUEUR
-    items = ["argent : ", "revenu : ",
-             "argent : ", "revenu : "]
-    variables = [argent_player[1], revenu[1], argent_player[0], revenu[0]]
-    colors = [RED, RED, BLUE, BLUE]
-    coordonnees = [(0, 10), (0, 30),(taille_case * terrain_dim[0] - 200, 10),
-                   (taille_case * terrain_dim[0] - 200, 30), (taille_case * terrain_dim[0] - 200, 50),
-                   (taille_case * terrain_dim[0] - 200, 70)]
+    # AFFICHAGE DES INFORMATIONS UTILISATEURS
+    messages = [
+        {
+            "texte": "argent : ",
+            "contenu": argent_player
+        },
+        {
+            "texte": "revenu : ",
+            "contenu": revenu
+        }
+    ]
 
-    for i, v, c, co in zip(items, variables, colors, coordonnees):
-        text = police.render(i + str(v), True, c)
-        screen.blit(text, co)
+    message_counter = 0
+    for message in messages:
+        y = message_counter * 20
+        redtxt = police.render(message["texte"] + str(message["contenu"][1]), True, RED)
+        bluetxt = police.render(message["texte"] + str(message["contenu"][0]), True, BLUE)
+        screen.blit(redtxt, (0, y))
+        screen.blit(bluetxt, (screen.get_width() - redtxt.get_width(), y))
 
+        message_counter += 1
+
+    # Affichage de la barre d'achat
     for unite in range(0, len(units_id)):
         unite_src = units[units_id[unite]]
-        sprite_unite = Surface((0, 0))
+        sprite_unite: Surface = unite_src.sprite1
         if tour_equipe == 1:
             sprite_unite = unite_src.sprite2
-        else:
-            sprite_unite = unite_src.sprite1
+
         image_unite = scale(sprite_unite, (taille_case - 4, taille_case - 4))
         frame_unite = Surface((taille_case, taille_case))
         if unite == selected_unit_create:
             frame_unite.fill((255, 255, 0))
         else:
-            frame_unite.fill((0, 0, 0))
+            frame_unite.fill(WHITE)
         frame_unite.blit(image_unite, (2, 2))
         screen.blit(frame_unite, (taille_case * unite, taille_case * terrain_dim[1]))
 

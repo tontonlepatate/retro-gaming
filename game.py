@@ -11,7 +11,7 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame.transform import scale
 
-from common import palette, RED, WHITE, YELLOW, BLACK, GREEN
+from common import palette, RED, WHITE, YELLOW, BLACK, GREEN, units
 from unite import Unite
 
 scriptPATH = os.path.abspath(inspect.getsourcefile(lambda: 0))  # compatible interactive Python Shell
@@ -214,7 +214,6 @@ def click_handler():
     global selected_unit_create
     global terrain
     global terrain_dim
-    global units
     global bases
 
     if lastclick:

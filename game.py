@@ -868,8 +868,8 @@ def afficher_unite():
         else:
             image = unite.classeunite.sprite1
 
-        icon_unite: Surface = scale(image, (taille_case // 2, taille_case // 2))
-        screen.blit(icon_unite, (int((unite.X + 1 / 4) * taille_case), int((unite.Y + 1 / 4) * taille_case)))
+        icon_unite: Surface = scale(image, (taille_case - 8, taille_case - 8))
+        screen.blit(icon_unite, (int(unite.X * taille_case + 4), int(unite.Y * taille_case + 4)))
 
         # Affichage des HP
         afficher_hp(terrain_units[cible_id].hp, terrain_units[cible_id].X, terrain_units[cible_id].Y)
@@ -988,6 +988,9 @@ while not done:
             frame_unite.fill(WHITE)
         frame_unite.blit(image_unite, (2, 2))
         screen.blit(frame_unite, (taille_case * unite, taille_case * terrain_dim[1]))
+
+        if unite_src.stat["cost"] > argent_player[tour_equipe]:
+            trans_case(BLACK, (unite, terrain_dim[1]))
 
     for base in bases:
         if base["hp"] <= 0:

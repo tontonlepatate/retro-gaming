@@ -807,21 +807,17 @@ def click_handler():
 
 
 def afficher_terrain():
+    screen.fill(WHITE)
     laby = np.zeros((terrain_dim[0], terrain_dim[1]), pygame.Surface)
     for y in range(terrain_dim[1]):
         ligne = plan[y]
+        ypix = taille_case * y
         for x in range(terrain_dim[0]):
-            c = ligne[x]
-            laby[x, y] = palette[c]
-
-    for ix in range(terrain_dim[0]):
-        for iy in range(terrain_dim[1]):
-            xpix = taille_case * ix
-            ypix = taille_case * iy
-            p = laby[ix, iy]
+            xpix = taille_case * x
+            biome = ligne[x]
             image = transform.scale(palette['P'], (taille_case, taille_case))
             screen.blit(image, [xpix, ypix])
-            image = transform.scale(p, (taille_case, taille_case))
+            image = transform.scale(palette[biome], (taille_case, taille_case))
             screen.blit(image, [xpix, ypix])
 
     trans_case(BLUE, (bases[0]["X"], bases[0]["Y"]))
@@ -838,13 +834,13 @@ def afficher_unite():
             select_rect = Rect(unite.X * taille_case, unite.Y * taille_case, taille_case, taille_case)
             rect(screen, [255, 100, 0], select_rect)
 
-        sprite_unite = Surface((0, 0))
+        image: Surface
         if unite.equipe == 1:
-            sprite_unite = unite.classeunite.sprite2
+            image = unite.classeunite.sprite2
         else:
-            sprite_unite = unite.classeunite.sprite1
+            image = unite.classeunite.sprite1
 
-        icon_unite = scale(sprite_unite, (taille_case // 2, taille_case // 2))
+        icon_unite: Surface = scale(image, (taille_case // 2, taille_case // 2))
         screen.blit(icon_unite, (int((unite.X + 1 / 4) * taille_case), int((unite.Y + 1 / 4) * taille_case)))
 
         # Affichage des HP
@@ -942,11 +938,10 @@ while not done:
 
     for unite in range(0, len(units_id)):
         unite_src = units[units_id[unite]]
-        sprite_unite: Surface
+        sprite_unite: Surface = unite_src.sprite1
         if tour_equipe == 1:
             sprite_unite = unite_src.sprite2
-        else:
-            sprite_unite = unite_src.sprite1
+
         image_unite = scale(sprite_unite, (taille_case - 4, taille_case - 4))
         frame_unite = Surface((taille_case, taille_case))
         if unite == selected_unit_create:
